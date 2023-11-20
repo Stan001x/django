@@ -1,0 +1,43 @@
+{% extends "notarius/base.html" %}
+
+
+{% block content%}
+
+    {% include "notarius/navbar.html" %}
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col p-2 border">
+          Номер договора
+        </div>
+        <div class="col p-2 border">
+          Дата договора
+        </div>
+        <div class="col p-2 border">
+          ФИО Заказчика
+        </div>
+        <div class="col p-2 border">
+          Фото объекта
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col p-2 border">
+          {{ item.contractNumber }}
+        </div>
+        <div class="col p-2 border">
+          {{ item.conrtractDate }}
+        </div>
+        <div class="col p-2 border">
+          {{ item.clientname }}
+        </div>
+        <div class="col p-2 border">
+          {% if item.image %}
+            <img src="{{item.image.url}}">
+        </div>
+      </div>
+    </div>
+
+{% endblock content%}
