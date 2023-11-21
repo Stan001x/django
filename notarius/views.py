@@ -15,3 +15,6 @@ def indexItem(request, my_id):
         'item':item
     }
     return render(request, "notarius/report.html", context=context)
+
+def add_item(request):
+    return render(request, "notarius/additem.html")
