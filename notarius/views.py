@@ -17,4 +17,11 @@ def indexItem(request, my_id):
     return render(request, "notarius/report.html", context=context)
 
 def add_item(request):
+    if request.method == "POST":
+        contractnum = request.POST.get("contractnum")
+        contractdate = request.POST.get("contractdate")
+        clientname = request.POST.get("clientname")
+        image = request.FILES['upload']
+        item = Report(contractNumber=contractnum, conrtractDate=contractdate, clientname=clientname, image=image)
+        item.save()
     return render(request, "notarius/additem.html")
