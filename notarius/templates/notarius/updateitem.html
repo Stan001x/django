@@ -1,9 +1,12 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="number" placeholder="Номер договора..." name="contractnum" id="contractnum">
-    <input type="date" placeholder="Дата договора..." name="contractdate" id="contractdate">
-    <input type="text" placeholder="ФИО заказчика..." name="clientname" id="clientname">
+    <input type="number" value="{{ item.contractNumber }}" placeholder="Номер договора..." name="contractnum" id="contractnum">
+    <input type="date" value="{{ item.conrtractDate }}" placeholder="Дата договора..." name="contractdate" id="contractdate">
+    <input type="text" value="{{ item.clientname }}" placeholder="ФИО заказчика..." name="clientname" id="clientname">
+    {% if item.image %}
+    <img src="{{item.image.url}}">
+    {% endif %}
     <input type="file" accept="image/*" name="upload" id="upload">
-    <button type="submit" name="Add Item" value="Add Item">Сформировать отчет</button>
+    <button type="submit" name="Add Item" value="Add Item">Обновить отчет</button>
 
 </form>

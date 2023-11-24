@@ -25,3 +25,14 @@ def add_item(request):
         item = Report(contractNumber=contractnum, conrtractDate=contractdate, clientname=clientname, image=image)
         item.save()
     return render(request, "notarius/additem.html")
+
+def update_item(request, my_id):
+    item = Report.objects.get(id=my_id)
+    if request.method == "POST":
+        item.contractNumber = request.POST.get("contractnum")
+        item.conrtractDate = request.POST.get("contractdate")
+        item.clientname = request.POST.get("clientname")
+        item.image = request.FILES.get('upload', item.image)
+        item.save()
+    context = {'item': item}
+    return render(request, "notarius/updateitem.html", context)
