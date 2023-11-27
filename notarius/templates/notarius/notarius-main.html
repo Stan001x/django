@@ -7,16 +7,19 @@
   {% include "notarius/navbar.html" %}
 
   <h1 class="text-center">Список отчетов</h1>
-
+    <div class="container">
+      <div><a href="{% url 'notarius:add_item' %}" class="btn btn-primary">Новый отчет</a>
+      </div>
+    </div>
     <div class="container">
       <div class="row">
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           Номер договора
         </div>
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           Дата договора
         </div>
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           ФИО Заказчика
         </div>
       </div>
@@ -25,13 +28,13 @@
     <div class="container">
       <a href="{% url 'notarius:report' item.id %}">
         <div class="row">
-          <div class="col p-2 border">
+          <div class="col-3 p-2 border">
             {{ item.contractNumber }}
           </div>
-          <div class="col p-2 border">
+          <div class="col-3 p-2 border">
             {{ item.conrtractDate }}
           </div>
-          <div class="col p-2 border">
+          <div class="col-3 p-2 border">
             {{ item.clientname }}
           </div>
         </div>

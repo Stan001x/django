@@ -1,12 +1,13 @@
 from django.urls import path
-from notarius import views
+from .views import index, indexItem, add_item, update_item, delete_item
 
 app_name = "notarius"
 
 urlpatterns = [
     #/notarius/
-    path('', views.index),
-    path('<int:my_id>/', views.indexItem, name="report"),
-    path('additem/', views.add_item, name="add_item"),
-    path('updateitem/<int:my_id>/', views.update_item, name="update_item")
+    path('', index, name="index"),
+    path('<int:my_id>/', indexItem, name="report"),
+    path('additem/', add_item, name="add_item"),
+    path('updateitem/<int:my_id>/', update_item, name="update_item"),
+    path('deleteitem/<int:my_id>/', delete_item, name="delete_item")
 ]

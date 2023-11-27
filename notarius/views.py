@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Report
+
 
 def index(request):
     items = Report.objects.all()
@@ -24,6 +25,7 @@ def add_item(request):
         image = request.FILES['upload']
         item = Report(contractNumber=contractnum, conrtractDate=contractdate, clientname=clientname, image=image)
         item.save()
+        return redirect('Report.id')
     return render(request, "notarius/additem.html")
 
 def update_item(request, my_id):
@@ -36,3 +38,11 @@ def update_item(request, my_id):
         item.save()
     context = {'item': item}
     return render(request, "notarius/updateitem.html", context)
+
+def delete_item(request, my_id):
+    item = Report.objects.get(id=my_id)
+    if request.method == "POST":
+        item.delete()
+        return redirect("/notarius/")
+    context = {'item': item}
+    return render(request, "notarius/deleteitem.html", context)

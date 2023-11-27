@@ -1,7 +1,10 @@
+{% extends "notarius/base.html" %}
+{% block content%}
+{% include "notarius/navbar.html" %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="number" value="{{ item.contractNumber }}" placeholder="Номер договора..." name="contractnum" id="contractnum">
-    <input type="date" value="{{ item.conrtractDate }}" placeholder="Дата договора..." name="contractdate" id="contractdate">
+    <input type="date" value="{{ item.conrtractDate|date:"Y-m-d" }}" placeholder="Дата договора..." name="contractdate" id="contractdate">
     <input type="text" value="{{ item.clientname }}" placeholder="ФИО заказчика..." name="clientname" id="clientname">
     {% if item.image %}
     <img src="{{item.image.url}}">
@@ -10,3 +13,6 @@
     <button type="submit" name="Add Item" value="Add Item">Обновить отчет</button>
 
 </form>
+
+
+{% endblock content %}

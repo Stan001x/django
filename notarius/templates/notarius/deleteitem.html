@@ -1,0 +1,20 @@
+{% extends "notarius/base.html" %}
+{% block content%}
+  {% include "notarius/navbar.html" %}
+<h1>Удаление отчета</h1>
+<form method="post">
+  {% csrf_token %}
+  <div>
+    <label>Вы действительно хотите удалить отчет?</label>
+    <label>{{ item.contractNumber }}, заказчик {{ item.clientname }}</label>
+    <input type="submit" value="Подтвердить">
+    <a href="{% url 'notarius:index' %}">Отменить</a>
+  </div>
+</form>
+
+
+
+
+
+
+{% endblock content %}

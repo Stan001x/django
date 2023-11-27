@@ -1,3 +1,6 @@
+{% extends "notarius/base.html" %}
+{% block content%}
+  {% include "notarius/navbar.html" %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="number" placeholder="Номер договора..." name="contractnum" id="contractnum">
@@ -7,3 +10,4 @@
     <button type="submit" name="Add Item" value="Add Item">Сформировать отчет</button>
 
 </form>
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends "notarius/base.html" %}
+
+
+{% block content %}
+{% include "notarius/navbar.html" %}
+
+<div class="card" >
+   <div class="card-body">
+       <form method="post">
+           {% csrf_token %}
+           <div>Имя пользователя</div>
+           <div>{{ form.username }}</div>
+           <div>E-mail</div>
+           <div>{{ form.email }}</div>
+           <div>Пароль</div>
+           <div>{{ form.password1 }}</div>
+           <div>Повторите пароль</div>
+           <div>{{ form.password2 }}</div>
+           <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+       </form>
+
+  </div>
+</div>
+
+
+
+
+
+{% endblock content %}

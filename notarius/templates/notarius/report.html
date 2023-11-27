@@ -8,37 +8,39 @@
 
     <div class="container">
       <div class="row">
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           Номер договора
         </div>
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           Дата договора
         </div>
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           ФИО Заказчика
         </div>
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           Фото объекта
         </div>
       </div>
     </div>
     <div class="container">
       <div class="row">
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           {{ item.contractNumber }}
         </div>
-        <div class="col p-2 border">
-          {{ item.conrtractDate }}
+        <div class="col-3 p-2 border">
+          {{ item.conrtractDate|date:"d.m.Y" }}
         </div>
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           {{ item.clientname }}
         </div>
-        <div class="col p-2 border">
+        <div class="col-3 p-2 border">
           {% if item.image %}
-            <img src="{{item.image.url}}">
+            <img src="{{item.image.url}}" class="w-100">
           {% endif %}
         </div>
       </div>
+      <div><a class="btn btn-primary" href="{% url 'notarius:update_item' item.id %}" >Обновить отчет</a></div>
+      <div><a class="btn btn-danger" href="{% url 'notarius:delete_item' item.id %}" >Удалить отчет</a></div>
     </div>
 
 {% endblock content%}
