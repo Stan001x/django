@@ -1,0 +1,34 @@
+{% extends "notarius/base.html" %}
+
+{% block content %}
+{% include "notarius/navbar.html" %}
+
+{% if user.profile %}
+
+
+<div class="card" >
+   <div class="card-body">
+        Страница пользователя
+   </div>
+    {% if user.profile.image %}
+    <div><img src="{{ user.profile.image.url }}" style="width: 300px"></div>
+    {% endif %}
+
+    <div>{{ user.username }}</div>
+    <div></div>
+</div>
+{% else %}
+
+       <form method="post" enctype="multipart/form-data">
+           {% csrf_token %}
+            <input type="text" placeholder="+79139136565" name="contact_number" id="contact_number">
+            <input type="file" accept="image/*" name="upload" id="upload">
+            <button type="submit" name="Add Item" value="Add Item">Сохранить</button>
+       </form>
+
+
+{% endif %}
+
+
+
+{% endblock content %}

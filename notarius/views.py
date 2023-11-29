@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
 from .models import Report
+from django import forms
 
 
 def index(request):
@@ -17,15 +20,18 @@ def indexItem(request, my_id):
     }
     return render(request, "notarius/report.html", context=context)
 
+@login_required
 def add_item(request):
     if request.method == "POST":
         contractnum = request.POST.get("contractnum")
         contractdate = request.POST.get("contractdate")
         clientname = request.POST.get("clientname")
         image = request.FILES['upload']
-        item = Report(contractNumber=contractnum, conrtractDate=contractdate, clientname=clientname, image=image)
+        appraiser = request.user
+        item = Report(contractNumber=contractnum, conrtractDate=contractdate, clientname=clientname, image=image, appraiser=appraiser)
         item.save()
-        return redirect('Report.id')
+        my_id=item.pk
+        return redirect(f"/notarius/{my_id}")
     return render(request, "notarius/additem.html")
 
 def update_item(request, my_id):
@@ -46,3 +52,5 @@ def delete_item(request, my_id):
         return redirect("/notarius/")
     context = {'item': item}
     return render(request, "notarius/deleteitem.html", context)
+
+

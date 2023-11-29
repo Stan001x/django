@@ -22,6 +22,9 @@
         <div class="col-3 p-2 border">
           ФИО Заказчика
         </div>
+        <div class="col-3 p-2 border">
+          Оценщик
+        </div>
       </div>
     </div>
     {% for item in items %}
@@ -36,6 +39,9 @@
           </div>
           <div class="col-3 p-2 border">
             {{ item.clientname }}
+          </div>
+          <div class="col-3 p-2 border">
+            {{ item.appraiser.email }}
           </div>
         </div>
       </a>
