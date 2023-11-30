@@ -1,30 +1,38 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import DeleteView
+from django.urls import reverse_lazy
 
 from .models import Report
 from django import forms
 
 
-def index(request):
-    items = Report.objects.all()
-    context = {
-        'items':items
-    }
-    return render(request, "notarius/notarius-main.html", context)
+# def index(request):
+#   items = Report.objects.all()
+#    context = {
+#        'items':items
+#    }
+#    return render(request, "notarius/notarius-main.html", context)
 
 class ReportListView(ListView):
     model = Report
     template_name = "notarius/notarius-main.html"
     context_object_name = 'items'
 
-def indexItem(request, my_id):
-    item = Report.objects.get(id=my_id)
-    context = {
-        'item':item
-    }
-    return render(request, "notarius/report.html", context=context)
+# def indexItem(request, my_id):
+#    item = Report.objects.get(id=my_id)
+#    context = {
+#        'item':item
+#    }
+#    return render(request, "notarius/report.html", context=context)
+
+class ReportDetailView(DetailView):
+    model = Report
+    template_name = "notarius/report.html"
+    context_object_name = 'item'
+
 
 @login_required
 def add_item(request):
@@ -58,5 +66,9 @@ def delete_item(request, my_id):
         return redirect("/notarius/")
     context = {'item': item}
     return render(request, "notarius/deleteitem.html", context)
+
+class ReportDeleteView(DeleteView):
+    model = Report
+    success_url = reverse_lazy("notarius:index")
 
 
