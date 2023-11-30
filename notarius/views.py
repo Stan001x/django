@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
 
 from .models import Report
 from django import forms
@@ -12,6 +13,11 @@ def index(request):
         'items':items
     }
     return render(request, "notarius/notarius-main.html", context)
+
+class ReportListView(ListView):
+    model = Report
+    template_name = "notarius/notarius-main.html"
+    context_object_name = 'items'
 
 def indexItem(request, my_id):
     item = Report.objects.get(id=my_id)
