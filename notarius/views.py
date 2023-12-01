@@ -1,25 +1,35 @@
-from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.http import HttpResponseNotFound, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 from .models import Report
 from django import forms
 
 
 # def index(request):
-#   items = Report.objects.all()
-#    context = {
-#        'items':items
-#    }
+#   page_obj = items = Report.objects.all()
+#   item_name = request.Get.get('search')
+#   if item_name != '' and item_name is not None:
+#       page_obj = items.filter(name__icontains=item_name)
+#
+#   paginator = Paginator(page_obj, 2)
+#   page_number = request.GET.get('page')
+#   page_obj = paginator.get_page(page_number)
+#    context = {'items':items, 'page_obj':page_obj}
 #    return render(request, "notarius/notarius-main.html", context)
 
 class ReportListView(ListView):
     model = Report
     template_name = "notarius/notarius-main.html"
     context_object_name = 'items'
+    paginate_by = 10
 
 # def indexItem(request, my_id):
 #    item = Report.objects.get(id=my_id)
@@ -32,6 +42,12 @@ class ReportDetailView(DetailView):
     model = Report
     template_name = "notarius/report.html"
     context_object_name = 'item'
+    pk_url_kwarg = 'pk'
+
+    def get_context_data(self, **kwargs):
+        context = super(ReportDetailView, self).get_context_data(**kwargs)
+        context["stripe_publishable_key"] = settings.STRIPE_PUBLISHABLE_KEY
+        return context
 
 
 @login_required

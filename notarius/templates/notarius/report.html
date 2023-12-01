@@ -41,6 +41,7 @@
       </div>
       <div><a class="btn btn-primary" href="{% url 'notarius:update_item' item.id %}" >Обновить отчет</a></div>
       <div><a class="btn btn-danger" href="{% url 'notarius:delete_item' item.id %}" >Удалить отчет</a></div>
+      <div><a class="btn btn-danger" href="{% url 'notarius:delete_item' item.id %}" >Купить</a></div>
     </div>
 
 {% endblock content%}

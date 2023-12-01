@@ -136,3 +136,5 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = 'notarius:index'
 LOGOUT_REDIRECT_URL = 'notarius:index'
 LOGIN_URL = 'users:login'
+
+STRIPE_PUBLISHABLE_KEY = '1'

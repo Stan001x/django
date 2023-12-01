@@ -11,6 +11,17 @@
       <div><a href="{% url 'notarius:add_item' %}" class="btn btn-primary">Новый отчет</a>
       </div>
     </div>
+
+    <div class="container">
+      <div>
+        <div>Поиск</div>
+        <form method="get">
+          <input type="text" name="search">
+        </form>
+      </div>
+    </div>
+
+
     <div class="container">
       <div class="row">
         <div class="col-3 p-2 border">
@@ -47,5 +58,28 @@
       </a>
     </div>
     {% endfor %}
+
+    <div class="container d-flex py-2">
+    <div>
+      {% if page_obj.has_previous %}
+      <a href="?page=1" class="px-2">Первая</a>
+      <a href="?page={{ page_obj.previous_page_number}}" class="px-2">Предыдущая</a>
+
+      {% endif %}
+    </div>
+
+    <div class="px-2">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</div>
+
+      <div>
+      {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number}}" class="px-2">Следующая</a>
+      <a href="?page={{ page_obj.paginator.num_pages}}" class="px-2">Последняя</a>
+
+      {% endif %}
+      </div>
+
+
+
+    </div>
 
 {% endblock content %}
