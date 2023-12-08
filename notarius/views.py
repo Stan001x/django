@@ -88,3 +88,7 @@ class ReportDeleteView(DeleteView):
     success_url = reverse_lazy("notarius:index")
 
 
+def main(request):
+   return render(request, "notarius/main.html")
+
+
