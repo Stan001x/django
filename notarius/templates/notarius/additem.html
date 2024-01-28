@@ -3,11 +3,20 @@
   {% include "notarius/navbar.html" %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="number" placeholder="Номер договора..." name="contractnum" id="contractnum">
+<!--    <input type="number" placeholder="Номер договора..." name="contractnum" id="contractnum">
     <input type="date" placeholder="Дата договора..." name="contractdate" id="contractdate">
     <input type="text" placeholder="ФИО заказчика..." name="clientname" id="clientname">
     <input type="file" accept="image/*" name="upload" id="upload">
-    <button type="submit" name="Add Item" value="Add Item">Сформировать отчет</button>
+    <button type="submit" name="Add Item" value="Add Item">Сформировать отчет</button>-->
+
+        <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+    <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+
+    <button type="submit" name="Add Item" value="Add Item">Создать отчет</button>
+
 
 </form>
 {% endblock content %}

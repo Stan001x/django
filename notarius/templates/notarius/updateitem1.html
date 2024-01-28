@@ -1,0 +1,21 @@
+{% extends "notarius/base.html" %}
+{% block content%}
+{% include "notarius/navbar.html" %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+    <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+
+    {% if item.image %}
+    <p><img src="{{item.image.url}}" width="200px"></p>
+    {% endif %}
+    <button type="submit" name="Add Item" value="Add Item">Обновить отчет</button>
+    <button type="submit" name="make_report" value="Make report">Создать Word</button>
+
+</form>
+
+
+{% endblock content %}
