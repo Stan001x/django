@@ -30,7 +30,7 @@ class Report(models.Model):
 
 
     def __str__(self):
-        return self.clientname
+        return self.clientName
 
     def get_absolute_url(self):
         return reverse('notarius:report', kwargs={'pk': self.pk})
@@ -38,7 +38,7 @@ class Report(models.Model):
 
 
 class PurposeOfAssessment(models.Model):
-    purposeOfAssessment1 = models.CharField(null=True, verbose_name="Цель оценки")
+    purposeOfAssessment1 = models.CharField(verbose_name="Цель оценки")
 
     class Meta:
         verbose_name = "Цель оценки"

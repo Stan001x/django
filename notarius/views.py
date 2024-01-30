@@ -117,11 +117,20 @@ class AddItem(LoginRequiredMixin, CreateView):
         context["purpose_of_assessment"] = CreatePurposeOfAssessment()
         # self.purposeOfAssessment_id = self.request.POST.get('purposeOfAssessment')
         # print(self.purposeOfAssessment_id)
+        # if self.request.method == "POST":
+        #     PurposeOfAssessment.objects.create(purposeOfAssessment1=self.request.POST.get('purposeOfAssessment1'))
         return context
 #    success_url = reverse_lazy("notarius:index")
     def form_valid(self, form):
+        print('перед пурпос')
+        purpose_id = PurposeOfAssessment.objects.create(purposeOfAssessment1=self.request.POST.get('purposeOfAssessment1'))
+        print('после пурпос')
         result = super().form_valid(form)
-
+        thisreport = Report.objects.get(id=self.object.pk)
+        thisreport.purposeOfAssessment_id = purpose_id.pk
+#        report = Report(purposeOfAssessment_id=purpose_id.pk)
+        thisreport.save(update_fields=['purposeOfAssessment_id', ], force_update=True)
+        print(self.request.POST.get('purposeOfAssessment1'))
         print("This is my newly created instance", self.object.pk)
 
         return result
