@@ -2,16 +2,17 @@ from django import forms
 from django.db import models
 from django.forms import SelectDateWidget
 
-from .models import Report
+from .models import Report, PurposeOfAssessment
 
-class AddReport(forms.ModelForm):
-    conrtractDate = forms.DateField(
-            widget=SelectDateWidget(
-                empty_label=("Choose Year", "Choose Month", "Choose Day"),
-            ), initial=Report.conrtractDate)
-    class Meta:
-        model = Report
-        fields = ['contractNumber', 'conrtractDate', 'clientname', 'image', ]
+
+# class AddReport(forms.ModelForm):
+#     conrtractDate = forms.DateField(
+#             widget=SelectDateWidget(
+#                 empty_label=("Choose Year", "Choose Month", "Choose Day"),
+#             ), initial=Report.conrtractDate)
+#     class Meta:
+#         model = Report
+#         fields = ['contractNumber', 'conrtractDate', 'image', ]
 
 class UpdateReport(forms.ModelForm):
     conrtractDate = forms.DateField(
@@ -20,7 +21,29 @@ class UpdateReport(forms.ModelForm):
             ), initial=Report.conrtractDate)
     class Meta:
         model = Report
-        fields = ['contractNumber', 'conrtractDate', 'clientname', 'image', ]
+        fields = ['contractNumber', 'conrtractDate', 'image', ]
+
+
+class CreateReport(forms.ModelForm):
+
+    class Meta:
+        model = Report
+        fields = ['contractNumber', 'conrtractDate', 'image', ]
+        required = (
+            'contractNumber',
+        )
+
+
+class CreatePurposeOfAssessment(forms.ModelForm):
+
+    class Meta:
+        model = PurposeOfAssessment
+        fields = '__all__'
+
+# class UpdateClientData(forms.ModelForm):
+#     class Meta:
+#         model = ClientData
+#         fields = ['clientFullName', 'clientAdress', ]
 
 
 

@@ -15,8 +15,8 @@ from docx import Document
 from docx.shared import Pt
 from docxtpl import DocxTemplate
 
-from .forms import UpdateReport, AddReport
-from .models import Report
+from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment
+from .models import Report, PurposeOfAssessment
 from django import forms
 
 
@@ -106,11 +106,25 @@ class ReportDetailView(DetailView):
 
 
 #@login_required
-class AddItem(CreateView):
-    form_class = AddReport
+class AddItem(LoginRequiredMixin, CreateView):
     template_name = 'notarius/additem.html'
-#    success_url = reverse_lazy("notarius:index")
+    model = Report
+    fields = '__all__'
+    context_object_name = 'item'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["purpose_of_assessment"] = CreatePurposeOfAssessment()
+        # self.purposeOfAssessment_id = self.request.POST.get('purposeOfAssessment')
+        # print(self.purposeOfAssessment_id)
+        return context
+#    success_url = reverse_lazy("notarius:index")
+    def form_valid(self, form):
+        result = super().form_valid(form)
+
+        print("This is my newly created instance", self.object.pk)
+
+        return result
 
 
 # def add_item(request):
@@ -145,6 +159,7 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
     fields = '__all__'
     context_object_name = 'item'
     template_name = 'notarius/updateitem1.html'
+
 
     def get_success_url(self, *args, **kwargs):
         """Detect the submit button used and act accordingly"""
