@@ -21,7 +21,7 @@ class ReportAdmin(admin.ModelAdmin):
 
 @admin.register(PurposeOfAssessment)
 class PurposeOfAssessmentAdmin(admin.ModelAdmin):
-    list_display = ('purposeOfAssessment', )
+    list_display = ('purposeOfAssessment1', )
 
 @admin.register(ClientType)
 class ClientTypeAdmin(admin.ModelAdmin):

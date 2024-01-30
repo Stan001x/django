@@ -38,13 +38,13 @@ class Report(models.Model):
 
 
 class PurposeOfAssessment(models.Model):
-    purposeOfAssessment = models.CharField(null=True, verbose_name="Цель оценки")
+    purposeOfAssessment1 = models.CharField(null=True, verbose_name="Цель оценки")
 
     class Meta:
         verbose_name = "Цель оценки"
         verbose_name_plural = "Цель оценки"
     def __str__(self):
-        return self.purposeOfAssessment
+        return self.purposeOfAssessment1
 
 
 class ClientType(models.Model):
