@@ -15,7 +15,7 @@ from docx import Document
 from docx.shared import Pt
 from docxtpl import DocxTemplate
 
-from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment
+from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm
 from .models import Report, PurposeOfAssessment
 from django import forms
 
@@ -108,33 +108,76 @@ class ReportDetailView(DetailView):
 #@login_required
 class AddItem(LoginRequiredMixin, CreateView):
     template_name = 'notarius/additem.html'
-    model = Report
-    fields = '__all__'
+    form_class = CreateReport
+#    model = Report
+#    fields = '__all__'
     context_object_name = 'item'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["purpose_of_assessment"] = CreatePurposeOfAssessment()
+        context["client_person_data_form"] = CreatePersonDataForm()
+
+#        context["client_person_data_form"] = None
+
         # self.purposeOfAssessment_id = self.request.POST.get('purposeOfAssessment')
         # print(self.purposeOfAssessment_id)
         # if self.request.method == "POST":
         #     PurposeOfAssessment.objects.create(purposeOfAssessment1=self.request.POST.get('purposeOfAssessment1'))
         return context
 #    success_url = reverse_lazy("notarius:index")
-    def form_valid(self, form):
-        print('перед пурпос')
-        purpose_id = PurposeOfAssessment.objects.create(purposeOfAssessment1=self.request.POST.get('purposeOfAssessment1'))
-        print('после пурпос')
-        result = super().form_valid(form)
-        thisreport = Report.objects.get(id=self.object.pk)
-        thisreport.purposeOfAssessment_id = purpose_id.pk
-#        report = Report(purposeOfAssessment_id=purpose_id.pk)
-        thisreport.save(update_fields=['purposeOfAssessment_id', ], force_update=True)
-        print(self.request.POST.get('purposeOfAssessment1'))
-        print("This is my newly created instance", self.object.pk)
 
-        return result
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        # if form('clientType') == 2:
+        #     print('ok - 2')
+        #     return render(request, self.template_name, context={'form': form, })
+        purpose_form = CreatePurposeOfAssessment(request.POST)
+        person_data_form = CreatePersonDataForm(request.POST)
+        if (form.is_valid() and purpose_form.is_valid()):
+            # <process form cleaned data>
+            item_purpose = purpose_form.save()
+            print(item_purpose.pk)
+            #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
+            return redirect(f"/notarius/")
+        return render(request, self.template_name, context={'form': form, "purpose_of_assessment": purpose_form})
 
+
+#     def form_valid(self, form):
+#         print('перед пурпос')
+#         purpose_id = PurposeOfAssessment.objects.create(purposeOfAssessment1=self.request.POST.get('purposeOfAssessment1'))
+#         print('после пурпос')
+#         result = super().form_valid(form)
+#         thisreport = Report.objects.get(id=self.object.pk)
+#         thisreport.purposeOfAssessment_id = purpose_id.pk
+# #        report = Report(purposeOfAssessment_id=purpose_id.pk)
+#         thisreport.save(update_fields=['purposeOfAssessment_id', ], force_update=True)
+#         print(self.request.POST.get('purposeOfAssessment1'))
+#         print("This is my newly created instance", self.object.pk)
+#
+#         return result
+
+# def add_item(request):
+#
+#     if request.method == "POST":
+#
+#         report_form = CreateReport(request.POST, request.FILES)
+#         purpose_form = CreatePurposeOfAssessment(request.POST)
+#
+#         if (report_form.is_valid() and purpose_form.is_valid()):
+#             report_form.save()
+#             purpose_form.save()
+#             thisreport = Report.pk
+#             print(thisreport)
+#             return redirect(f"/notarius/")
+#
+#     else:
+#         report_form = CreateReport(request.POST, request.FILES)
+#         purpose_form = CreatePurposeOfAssessment(request.POST)
+#
+#     data = {'report_form': report_form,
+#                 'purpose_form': purpose_form}
+#     return render(request, "notarius/additem.html", data)
 
 # def add_item(request):
 #     if request.method == "POST":

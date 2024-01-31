@@ -1,6 +1,39 @@
 {% extends "notarius/base.html" %}
 {% block content%}
   {% include "notarius/navbar.html" %}
+
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+
+
+    $("#id_clientType").change(function () {
+        const subjectId = $(this).val();  // get the selected subject ID from the HTML dropdown list
+        console.log(subjectId);
+        $.ajax({                       // initialize an AJAX request
+            type: "POST",
+            url: '{% url "notarius:add_item" %}',
+            data: {
+                'clientType': subjectId,       // add the country id to the POST parameters
+                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            //success: function (data) {   // `data` is from `get_topics_ajax` view function
+            //    let html_data = '<option value="">---------</option>';
+            //    data.forEach(function (data) {
+            //        html_data += `<option value="${data.id}">${data.title}</option>`
+            //    });
+            //    $("#question-topic").html(html_data); // replace the contents of the topic input with the data that came from the server
+            //}
+        });
+    });
+    });
+</script>
+{% endblock javascript %}
+
+
+
+
 <div class="container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -23,6 +56,13 @@
             {% for p in purpose_of_assessment %}
             <div class="col-3"> <label class="form-label" for="{{ p.id_for_label }}">{{ p.label }}</label></div>
                 <div class="col-9">{{ p }}<div class="form-error">{{ p.errors }}</div></div>
+            {% endfor %}
+            </div>
+
+            <div class="row">
+            {% for d in client_person_data_form %}
+            <div class="col-3"> <label class="form-label" for="{{ d.id_for_label }}">{{ d.label }}</label></div>
+                <div class="col-9">{{ d }}<div class="form-error">{{ d.errors }}</div></div>
             {% endfor %}
             </div>
 

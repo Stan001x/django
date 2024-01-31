@@ -38,7 +38,7 @@ class Report(models.Model):
 
 
 class PurposeOfAssessment(models.Model):
-    purposeOfAssessment1 = models.CharField(verbose_name="Цель оценки")
+    purposeOfAssessment1 = models.CharField(verbose_name="Цель оценки", default=1)
 
     class Meta:
         verbose_name = "Цель оценки"
@@ -56,5 +56,12 @@ class ClientType(models.Model):
     def __str__(self):
         return self.clientType
 
+class ClientPersonData(models.Model):
+    clientName1 = models.CharField(max_length=255, verbose_name="ФИО клиента1", null=True)
+    clientAdress1 = models.TextField( verbose_name="Адрес клиента1", null=True)
+    clientPasportSer1 = models.CharField(max_length=4, verbose_name="Серия паспорта1", null=True)
+    clientPasportNum1 = models.CharField(max_length=6, verbose_name="Номер паспорта1", null=True)
+    clientPasportDate1 = models.DateField(verbose_name="Дата выдачи паспорта1", null=True)
+    clientPasportGov1 = models.CharField(max_length=255, verbose_name="Кем выдан паспорт1", null=True)
 
 
