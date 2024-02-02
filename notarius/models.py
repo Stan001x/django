@@ -10,16 +10,8 @@ class Report(models.Model):
     purposeOfAssessment = models.ForeignKey('PurposeOfAssessment', on_delete=models.CASCADE, default='', verbose_name="Цель оценки", related_name='purpose', null=True, blank=True)
     clientType = models.ForeignKey('ClientType', on_delete=models.CASCADE, default='', verbose_name="Тип Заказчика", related_name='clienttype', null=True)
     clientName = models.CharField(max_length=255, verbose_name="ФИО клиента", null=True)
-    clientAdress = models.TextField( verbose_name="Адрес клиента", null=True)
-    clientPasportSer = models.CharField(max_length=4, verbose_name="Серия паспорта", null=True)
-    clientPasportNum = models.CharField(max_length=6, verbose_name="Номер паспорта", null=True)
-    clientPasportDate = models.DateField(verbose_name="Дата выдачи паспорта", null=True)
-    clientPasportGov = models.CharField(max_length=255, verbose_name="Кем выдан паспорт", null=True)
-    objectOfAssessmentModel = models.CharField(max_length=255, verbose_name="Марка/модель автомобиля", null=True)
-    objectOfAssessmentYear = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2050)], verbose_name="Год выпуска автомобиля", null=True)
-    objectOfAssessmentVIN = models.CharField(max_length=255, verbose_name="VIN автомобиля", null=True)
-
-
+    clientPersonData = models.ForeignKey('ClientPersonData', on_delete=models.CASCADE, default='', verbose_name="Данные клиента", related_name='clientdata', null=True )
+    objectOfAssessment = models.ForeignKey('ObjectOfAssessment', on_delete=models.CASCADE, default='', verbose_name="Объект оценки", related_name='objectofassessment', null=True)
 
     image = models.ImageField(null=True, upload_to='images')
 
@@ -57,11 +49,14 @@ class ClientType(models.Model):
         return self.clientType
 
 class ClientPersonData(models.Model):
-    clientName1 = models.CharField(max_length=255, verbose_name="ФИО клиента1", null=True)
-    clientAdress1 = models.TextField( verbose_name="Адрес клиента1", null=True)
-    clientPasportSer1 = models.CharField(max_length=4, verbose_name="Серия паспорта1", null=True)
-    clientPasportNum1 = models.CharField(max_length=6, verbose_name="Номер паспорта1", null=True)
-    clientPasportDate1 = models.DateField(verbose_name="Дата выдачи паспорта1", null=True)
-    clientPasportGov1 = models.CharField(max_length=255, verbose_name="Кем выдан паспорт1", null=True)
+    clientAdress = models.TextField( verbose_name="Адрес клиента", null=True)
+    clientPasportSer = models.CharField(max_length=4, verbose_name="Серия паспорта", null=True)
+    clientPasportNum = models.CharField(max_length=6, verbose_name="Номер паспорта", null=True)
+    clientPasportDate = models.DateField(verbose_name="Дата выдачи паспорта", null=True)
+    clientPasportGov = models.CharField(max_length=255, verbose_name="Кем выдан паспорт", null=True)
 
 
+class ObjectOfAssessment(models.Model):
+    objectOfAssessmentModel = models.CharField(max_length=255, verbose_name="Марка/модель автомобиля", null=True)
+    objectOfAssessmentYear = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2050)], verbose_name="Год выпуска автомобиля", null=True)
+    objectOfAssessmentVIN = models.CharField(max_length=255, verbose_name="VIN автомобиля", null=True)

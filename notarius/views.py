@@ -15,7 +15,7 @@ from docx import Document
 from docx.shared import Pt
 from docxtpl import DocxTemplate
 
-from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm
+from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm
 from .models import Report, PurposeOfAssessment
 from django import forms
 
@@ -101,6 +101,7 @@ class ReportDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ReportDetailView, self).get_context_data(**kwargs)
+
         context["stripe_publishable_key"] = settings.STRIPE_PUBLISHABLE_KEY
         return context
 
@@ -115,13 +116,10 @@ class AddItem(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["purpose_of_assessment"] = CreatePurposeOfAssessment()
+        # context["purpose_of_assessment"] = CreatePurposeOfAssessment()
         context["client_person_data_form"] = CreatePersonDataForm()
-
-#        context["client_person_data_form"] = None
-
+        context["object_of_assessment_form"] = ObjectOfAssessmentForm()
         # self.purposeOfAssessment_id = self.request.POST.get('purposeOfAssessment')
-        # print(self.purposeOfAssessment_id)
         # if self.request.method == "POST":
         #     PurposeOfAssessment.objects.create(purposeOfAssessment1=self.request.POST.get('purposeOfAssessment1'))
         return context
@@ -129,18 +127,55 @@ class AddItem(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
-        # if form('clientType') == 2:
-        #     print('ok - 2')
-        #     return render(request, self.template_name, context={'form': form, })
-        purpose_form = CreatePurposeOfAssessment(request.POST)
-        person_data_form = CreatePersonDataForm(request.POST)
-        if (form.is_valid() and purpose_form.is_valid()):
-            # <process form cleaned data>
-            item_purpose = purpose_form.save()
-            print(item_purpose.pk)
-            #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
+        client_person_data_form = CreatePersonDataForm(request.POST)
+        object_of_assessment_form = ObjectOfAssessmentForm(request.POST)
+
+        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid()):
+    #         # <process form cleaned data>
+            form.save()
+            item_client = client_person_data_form.save()
+            item_object = object_of_assessment_form.save()
             return redirect(f"/notarius/")
-        return render(request, self.template_name, context={'form': form, "purpose_of_assessment": purpose_form})
+    #         print(item_purpose.pk)
+    #         #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
+    #         return redirect(f"/notarius/")
+    # return render(request, self.template_name, context={'form': form, "purpose_of_assessment": purpose_form})
+
+    # def post(self, request, *args, **kwargs):
+    #     form = self.form_class(request.POST, request.FILES)
+    #
+    #     purpose_form = CreatePurposeOfAssessment(request.POST)
+    #     person_data_form = CreatePersonDataForm(request.POST)
+    #
+    #     if self.request.POST.get('clientType') == '2':
+    #         print('юридическое лицо')
+    #         person_data_form = None
+    #         form = None
+    #         return render(request, "notarius/test.html", context={'form': form, "purpose_of_assessment": purpose_form, "client_person_data_form": person_data_form})
+    #
+    #
+    #     else:
+    #         print('физическое лицо')
+    #         person_data_form = CreatePersonDataForm(request.POST)
+    #         return render(request, self.template_name, context={'form': form, "purpose_of_assessment": purpose_form, "client_person_data_form": person_data_form})
+
+        # if form.is_valid():
+        #     i = form.cleaned_data['clientType']
+        #     print(i)
+        # else:
+        #     i = form.cleaned_data['clientType']
+        #     print(i)
+        #     print('not valid')
+        #     person_data_form = None
+        #
+        #     if (form.is_valid() and purpose_form.is_valid() and person_data_form == None):
+        #         # <process form cleaned data>
+        #         item_purpose = purpose_form.save()
+        #         print(item_purpose.pk)
+        #         #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
+        #         return redirect(f"/notarius/")
+        # return render(request, self.template_name, context={'form': form, "purpose_of_assessment": purpose_form})
+
 
 
 #     def form_valid(self, form):

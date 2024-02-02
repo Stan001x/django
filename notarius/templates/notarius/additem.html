@@ -3,38 +3,49 @@
   {% include "notarius/navbar.html" %}
 
 {% block javascript %}
-<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function(){
 
 
     $("#id_clientType").change(function () {
         const subjectId = $(this).val();  // get the selected subject ID from the HTML dropdown list
-        console.log(subjectId);
+        //if (subjectId == 2)
+        //          {$("#3").addClass('d-none');}
+        //else        {$("#3").removeClass('d-none');}
         $.ajax({                       // initialize an AJAX request
             type: "POST",
             url: '{% url "notarius:add_item" %}',
             data: {
                 'clientType': subjectId,       // add the country id to the POST parameters
+                'clientTypeText': $("#id_clientType option:selected").text(),
                 'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
             },
-            //success: function (data) {   // `data` is from `get_topics_ajax` view function
+            success: function (response) {   // `data` is from `get_topics_ajax` view function
+
+            //      if (subjectId == 2)
+            //      {$("#3").addClass('d-none');
+            //      }
+            console.log($("#id_clientType option:selected").text());
+            document.getElementById('3').innerHTML = response;
+            }
             //    let html_data = '<option value="">---------</option>';
             //    data.forEach(function (data) {
             //        html_data += `<option value="${data.id}">${data.title}</option>`
             //    });
-            //    $("#question-topic").html(html_data); // replace the contents of the topic input with the data that came from the server
+            //    $("#3").html(); // replace the contents of the topic input with the data that came from the server
             //}
         });
     });
     });
-</script>
+</script>-->
 {% endblock javascript %}
 
 
 
 
-<div class="container">
+<div class="container py-4">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
     <!--    <input type="number" placeholder="Номер договора..." name="contractnum" id="contractnum">
@@ -52,6 +63,8 @@
                 {% endfor %}
             </div>
 
+        <h3 class="py-3">Данные Заказчика</h3>
+
             <div class="row">
             {% for p in purpose_of_assessment %}
             <div class="col-3"> <label class="form-label" for="{{ p.id_for_label }}">{{ p.label }}</label></div>
@@ -59,10 +72,21 @@
             {% endfor %}
             </div>
 
-            <div class="row">
+
+
+            <div class="row" id="i">
             {% for d in client_person_data_form %}
             <div class="col-3"> <label class="form-label" for="{{ d.id_for_label }}">{{ d.label }}</label></div>
                 <div class="col-9">{{ d }}<div class="form-error">{{ d.errors }}</div></div>
+            {% endfor %}
+            </div>
+
+            <h3 class="py-3">Объект оценки</h3>
+
+            <div class="row" id="1">
+            {% for o in object_of_assessment_form %}
+            <div class="col-3"> <label class="form-label" for="{{ o.id_for_label }}">{{ o.label }}</label></div>
+                <div class="col-9">{{ o }}<div class="form-error">{{ o.errors }}</div></div>
             {% endfor %}
             </div>
 

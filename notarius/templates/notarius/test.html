@@ -1,0 +1,28 @@
+    <form method="post" enctype="multipart/form-data">
+
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            <div class="row">
+                {% for f in form %}
+                <div class="col-3"> <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label></div>
+                <div class="col-9">{{ f }}<div class="form-error">{{ f.errors }}</div></div>
+
+                {% endfor %}
+            </div>
+
+            <div class="row">
+            {% for p in purpose_of_assessment %}
+            <div class="col-3"> <label class="form-label" for="{{ p.id_for_label }}">{{ p.label }}</label></div>
+                <div class="col-9">{{ p }}<div class="form-error">{{ p.errors }}</div></div>
+            {% endfor %}
+            </div>
+
+            <div class="row" id="3">
+            {% for d in client_person_data_form %}
+            <div class="col-3"> <label class="form-label" for="{{ d.id_for_label }}">{{ d.label }}</label></div>
+                <div class="col-9">{{ d }}<div class="form-error">{{ d.errors }}</div></div>
+            {% endfor %}
+            </div>
+
+
+
+    </form>

@@ -2,7 +2,7 @@ from django import forms
 from django.db import models
 from django.forms import SelectDateWidget
 
-from .models import Report, PurposeOfAssessment, ClientPersonData
+from .models import Report, PurposeOfAssessment, ClientPersonData, ObjectOfAssessment
 
 
 # class AddReport(forms.ModelForm):
@@ -15,23 +15,25 @@ from .models import Report, PurposeOfAssessment, ClientPersonData
 #         fields = ['contractNumber', 'conrtractDate', 'image', ]
 
 class UpdateReport(forms.ModelForm):
-    conrtractDate = forms.DateField(
-            widget=SelectDateWidget(
-                empty_label=("Choose Year", "Choose Month", "Choose Day"),
-            ), initial=Report.conrtractDate)
+
     class Meta:
         model = Report
         fields = ['contractNumber', 'conrtractDate', 'image', ]
+
 
 
 class CreateReport(forms.ModelForm):
 
     class Meta:
         model = Report
-        fields = "__all__"
+        fields = ['contractNumber', 'conrtractDate', 'purposeOfAssessment', 'clientName', ]
         required = (
             'contractNumber',
         )
+        widgets = {
+            'conrtractDate': forms.TextInput(attrs={'type': 'date'}),
+#            'clientName': forms.TextInput(attrs={'class': '1'}),
+        }
 
 
 class CreatePurposeOfAssessment(forms.ModelForm):
@@ -47,6 +49,13 @@ class CreatePersonDataForm(forms.ModelForm):
     class Meta:
         model = ClientPersonData
         fields = '__all__'
+
+
+class ObjectOfAssessmentForm(forms.ModelForm):
+    class Meta:
+        model = ObjectOfAssessment
+        fields = '__all__'
+
 # class UpdateClientData(forms.ModelForm):
 #     class Meta:
 #         model = ClientData
