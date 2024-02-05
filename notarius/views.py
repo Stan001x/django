@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponseNotFound, JsonResponse
+from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.views import View
@@ -119,11 +119,17 @@ class AddItem(LoginRequiredMixin, CreateView):
         # context["purpose_of_assessment"] = CreatePurposeOfAssessment()
         context["client_person_data_form"] = CreatePersonDataForm()
         context["object_of_assessment_form"] = ObjectOfAssessmentForm()
+        # if self.request.POST.get('clientType') == '2':
+        #      print('лицо')
+        #      context["client_person_data_form"] = None
+             # return render(self.request, "notarius/test.html", context={"client_person_data_form": '1', })
+
         # self.purposeOfAssessment_id = self.request.POST.get('purposeOfAssessment')
         # if self.request.method == "POST":
         #     PurposeOfAssessment.objects.create(purposeOfAssessment1=self.request.POST.get('purposeOfAssessment1'))
         return context
 #    success_url = reverse_lazy("notarius:index")
+
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
@@ -132,27 +138,31 @@ class AddItem(LoginRequiredMixin, CreateView):
 
         if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid()):
     #         # <process form cleaned data>
-            form.save()
+            item_report = form.save()
             item_client = client_person_data_form.save()
             item_object = object_of_assessment_form.save()
-            return redirect(f"/notarius/")
-    #         print(item_purpose.pk)
-    #         #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
-    #         return redirect(f"/notarius/")
-    # return render(request, self.template_name, context={'form': form, "purpose_of_assessment": purpose_form})
+            report = Report.objects.get(id=item_report.pk)
+            report.clientPersonData_id = item_client.pk
+            report.objectOfAssessment_id = item_object.pk
+            report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', ], force_update=True)
+            return redirect('notarius:update_item1', item_report.pk)
 
-    # def post(self, request, *args, **kwargs):
+            #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
+        return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form})
+
+    # def post1(self, request, *args, **kwargs):
+    #     print('1')
     #     form = self.form_class(request.POST, request.FILES)
-    #
     #     purpose_form = CreatePurposeOfAssessment(request.POST)
     #     person_data_form = CreatePersonDataForm(request.POST)
-    #
+    #     print(self.request.POST.get('clientType'))
     #     if self.request.POST.get('clientType') == '2':
-    #         print('юридическое лицо')
-    #         person_data_form = None
-    #         form = None
-    #         return render(request, "notarius/test.html", context={'form': form, "purpose_of_assessment": purpose_form, "client_person_data_form": person_data_form})
+    #         print('лицо')
     #
+    #         return render(request, "notarius/test.html", context={'form': form, "purpose_of_assessment": purpose_form, "client_person_data_form": person_data_form})
+    #     else:
+    #         print('не понятно')
+
     #
     #     else:
     #         print('физическое лицо')

@@ -26,7 +26,7 @@ class CreateReport(forms.ModelForm):
 
     class Meta:
         model = Report
-        fields = ['contractNumber', 'conrtractDate', 'purposeOfAssessment', 'clientName', ]
+        fields = ['contractNumber', 'conrtractDate', 'purposeOfAssessment', 'clientName', 'clientType']
         required = (
             'contractNumber',
         )

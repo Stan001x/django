@@ -3,13 +3,14 @@
   {% include "notarius/navbar.html" %}
 
 {% block javascript %}
-<!--<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-<script>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<!--<script>
     $(document).ready(function(){
 
 
     $("#id_clientType").change(function () {
         const subjectId = $(this).val();  // get the selected subject ID from the HTML dropdown list
+        console.log(subjectId);
         //if (subjectId == 2)
         //          {$("#3").addClass('d-none');}
         //else        {$("#3").removeClass('d-none');}
@@ -20,15 +21,15 @@
                 'clientType': subjectId,       // add the country id to the POST parameters
                 'clientTypeText': $("#id_clientType option:selected").text(),
                 'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-                action: 'post'
-            },
-            success: function (response) {   // `data` is from `get_topics_ajax` view function
+                },
+            success: function () {   // `data` is from `get_topics_ajax` view function
 
             //      if (subjectId == 2)
             //      {$("#3").addClass('d-none');
             //      }
-            console.log($("#id_clientType option:selected").text());
-            document.getElementById('3').innerHTML = response;
+            console.log('ok');
+            //console.log($("#id_clientType option:selected").text());
+            //document.getElementById('3').innerHTML = response;
             }
             //    let html_data = '<option value="">---------</option>';
             //    data.forEach(function (data) {

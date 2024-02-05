@@ -9,7 +9,7 @@ class Report(models.Model):
     conrtractDate = models.DateField(verbose_name="Дата договора")
     purposeOfAssessment = models.ForeignKey('PurposeOfAssessment', on_delete=models.CASCADE, default='', verbose_name="Цель оценки", related_name='purpose', null=True, blank=True)
     clientType = models.ForeignKey('ClientType', on_delete=models.CASCADE, default='', verbose_name="Тип Заказчика", related_name='clienttype', null=True)
-    clientName = models.CharField(max_length=255, verbose_name="ФИО клиента", null=True)
+    clientName = models.CharField(max_length=255, verbose_name="ФИО клиента", null=True, blank=True)
     clientPersonData = models.ForeignKey('ClientPersonData', on_delete=models.CASCADE, default='', verbose_name="Данные клиента", related_name='clientdata', null=True )
     objectOfAssessment = models.ForeignKey('ObjectOfAssessment', on_delete=models.CASCADE, default='', verbose_name="Объект оценки", related_name='objectofassessment', null=True)
 
