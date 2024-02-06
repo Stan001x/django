@@ -26,13 +26,15 @@ class CreateReport(forms.ModelForm):
 
     class Meta:
         model = Report
-        fields = ['contractNumber', 'conrtractDate', 'purposeOfAssessment', 'clientName', 'clientType']
+        fields = ['contractNumber', 'conrtractDate', 'reportNumber', 'dateOfAssessment', 'dateOfReport', 'documentsOfReport', 'purposeOfAssessment', 'clientName']
         required = (
             'contractNumber',
         )
         widgets = {
             'conrtractDate': forms.TextInput(attrs={'type': 'date'}),
 #            'clientName': forms.TextInput(attrs={'class': '1'}),
+            'dateOfAssessment': forms.TextInput(attrs={'type': 'date'}),
+            'dateOfReport': forms.TextInput(attrs={'type': 'date'}),
         }
 
 
@@ -49,6 +51,10 @@ class CreatePersonDataForm(forms.ModelForm):
     class Meta:
         model = ClientPersonData
         fields = '__all__'
+
+        widgets = {
+            'clientPasportDate': forms.TextInput(attrs={'type': 'date'}),
+            }
 
 
 class ObjectOfAssessmentForm(forms.ModelForm):
