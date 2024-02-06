@@ -2,7 +2,7 @@ from django import forms
 from django.db import models
 from django.forms import SelectDateWidget
 
-from .models import Report, PurposeOfAssessment, ClientPersonData, ObjectOfAssessment
+from .models import Report, PurposeOfAssessment, ClientPersonData, ObjectOfAssessment, Analogues
 
 
 # class AddReport(forms.ModelForm):
@@ -60,6 +60,13 @@ class CreatePersonDataForm(forms.ModelForm):
 class ObjectOfAssessmentForm(forms.ModelForm):
     class Meta:
         model = ObjectOfAssessment
+        fields = '__all__'
+
+
+class AnaloguesForm(forms.ModelForm):
+
+    class Meta:
+        model = Analogues
         fields = '__all__'
 
 # class UpdateClientData(forms.ModelForm):

@@ -15,8 +15,8 @@ from docx import Document
 from docx.shared import Pt
 from docxtpl import DocxTemplate
 
-from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm
-from .models import Report, PurposeOfAssessment
+from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm, AnaloguesForm
+from .models import Report, PurposeOfAssessment, Analogues, ObjectOfAssessment
 from django import forms
 
 
@@ -119,6 +119,7 @@ class AddItem(LoginRequiredMixin, CreateView):
         # context["purpose_of_assessment"] = CreatePurposeOfAssessment()
         context["client_person_data_form"] = CreatePersonDataForm()
         context["object_of_assessment_form"] = ObjectOfAssessmentForm()
+        context["analogues_form"] = AnaloguesForm()
         # if self.request.POST.get('clientType') == '2':
         #      print('лицо')
         #      context["client_person_data_form"] = None
@@ -135,20 +136,24 @@ class AddItem(LoginRequiredMixin, CreateView):
         form = self.form_class(request.POST, request.FILES)
         client_person_data_form = CreatePersonDataForm(request.POST)
         object_of_assessment_form = ObjectOfAssessmentForm(request.POST)
+        analogues_form = AnaloguesForm(request.POST, request.FILES)
 
-        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid()):
+        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form.is_valid()):
     #         # <process form cleaned data>
             item_report = form.save()
             item_client = client_person_data_form.save()
             item_object = object_of_assessment_form.save()
+            item_analogues = analogues_form.save()
             report = Report.objects.get(id=item_report.pk)
             report.clientPersonData_id = item_client.pk
             report.objectOfAssessment_id = item_object.pk
-            report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', ], force_update=True)
+            report.analogue1_id = item_analogues.pk
+            report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', 'analogue1_id', ], force_update=True)
             return redirect('notarius:update_item1', item_report.pk)
 
             #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
-        return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form})
+        return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form,
+                                                            "analogues_form": analogues_form,})
 
     # def post1(self, request, *args, **kwargs):
     #     print('1')

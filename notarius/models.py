@@ -122,7 +122,7 @@ class Analogues(models.Model):
 
         # Проверяем, указан ли логотип
         if self.image:
-            filename = self.image.name
+            filename = f'media/{self.image.name}'
             filepath = self.image.path
             width = self.image.width
             height = self.image.height
@@ -138,8 +138,7 @@ class Analogues(models.Model):
                 image = image.resize(
                     (round(width / max_size * _MAX_SIZE),  # Сохраняем пропорции
                     round(height / max_size * _MAX_SIZE)),
-                    Image.ANTIALIAS
-                )
+                    )
                 # И не забыть сохраниться
                 image.save(filename)
 
