@@ -113,8 +113,11 @@ class Analogues(models.Model):
                                                 null=True)
     analogueCost = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(100000000)], verbose_name="Стоимость", null=True)
     analogueSourceOfInformation = models.CharField(max_length=255, verbose_name="Источник информации", null=True)
-    image = models.ImageField(null=True, upload_to='analogues/vehicle/images', blank=True)
-    image1 = models.ImageField(null=True, upload_to='analogues/vehicle/images', blank=True)
+    offerDate = models.DateField(verbose_name="Дата объявления", null=True)
+    analogueImage1 = models.ForeignKey('Images', on_delete=models.CASCADE, default='', verbose_name="Скриншот 1 аналога",
+                                  related_name='analogueimage1', null=True)
+    analogueImage2 = models.ForeignKey('Images', on_delete=models.CASCADE, default='', verbose_name="Скриншот 2 аналога",
+                                  related_name='analogueimage2', null=True)
 
     def save(self, *args, **kwargs):
         # Сначала - обычное сохранение
@@ -145,3 +148,10 @@ class Analogues(models.Model):
 
     def __str__(self):
         return self.analogueModel
+
+class Images(models.Model):
+    imageName = models.CharField(max_length=255, verbose_name="Заголовок изображения", null=True, blank=True)
+    imageFile = models.ImageField(null=True, upload_to='analogues/vehicle/images', blank=True)
+
+    def __str__(self):
+        return self.imageFile

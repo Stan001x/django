@@ -117,16 +117,64 @@
 
               <h3 class="py-3">Аналоги</h3>
 
-            <div class="row" id="2">
-            {% for a in analogues_form %}
-            <div class="col-3 py-3"> <label class="form-label" for="{{ a.id_for_label }}">{{ a.label }}</label></div>
-                <div class="col-9 py-3">{{ a }}<div class="form-error">{{ a.errors }}</div></div>
-            {% endfor %}
+                    <div class="row" id="2">
+
+                        <div class="col-3 py-3 border">Характеристика</div>
+                        <div class="col-3 py-3 border">Аналог 1</div>
+                        <div class="col-3 py-3 border">Аналог 2</div>
+                        <div class="col-3 py-3 border">Аналог 3</div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueModel.id_for_label }}">{{ analogues_form1.analogueModel.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.non_field_errors }}{{ analogues_form1.analogueModel }}<div class="form-error">{{ analogues_form1.analogueModel.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.non_field_errors }}{{ analogues_form2.analogueModel }}<div class="form-error">{{ analogues_form2.analogueModel.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.non_field_errors }}{{ analogues_form3.analogueModel }}<div class="form-error">{{ analogues_form3.analogueModel.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueYear.id_for_label }}">{{ analogues_form1.analogueYear.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.analogueYear }}<div class="form-error">{{ analogues_form1.analogueYear.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.analogueYear }}<div class="form-error">{{ analogues_form2.analogueYear.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.analogueYear }}<div class="form-error">{{ analogues_form3.analogueYear.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueLocation.id_for_label }}">{{ analogues_form1.analogueLocation.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.analogueLocation }}<div class="form-error">{{ analogues_form1.analogueLocation.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.analogueLocation }}<div class="form-error">{{ analogues_form2.analogueLocation.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.analogueLocation }}<div class="form-error">{{ analogues_form3.analogueLocation.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueTechnicalCondition.id_for_label }}">{{ analogues_form1.analogueTechnicalCondition.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.analogueTechnicalCondition }}<div class="form-error">{{ analogues_form1.analogueTechnicalCondition.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.analogueTechnicalCondition }}<div class="form-error">{{ analogues_form2.analogueTechnicalCondition.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.analogueTechnicalCondition }}<div class="form-error">{{ analogues_form3.analogueTechnicalCondition.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueDeterioration.id_for_label }}">{{ analogues_form1.analogueDeterioration.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.analogueDeterioration }}<div class="form-error">{{ analogues_form1.analogueDeterioration.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.analogueDeterioration }}<div class="form-error">{{ analogues_form2.analogueDeterioration.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.analogueDeterioration }}<div class="form-error">{{ analogues_form3.analogueDeterioration.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueCost.id_for_label }}">{{ analogues_form1.analogueCost.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.analogueCost }}<div class="form-error">{{ analogues_form1.analogueCost.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.analogueCost }}<div class="form-error">{{ analogues_form2.analogueCost.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.analogueCost }}<div class="form-error">{{ analogues_form3.analogueCost.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueSourceOfInformation.id_for_label }}">{{ analogues_form1.analogueSourceOfInformation.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.analogueSourceOfInformation }}<div class="form-error">{{ analogues_form1.analogueSourceOfInformation.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.analogueSourceOfInformation }}<div class="form-error">{{ analogues_form2.analogueSourceOfInformation.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.analogueSourceOfInformation }}<div class="form-error">{{ analogues_form3.analogueSourceOfInformation.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.offerDate.id_for_label }}">{{ analogues_form1.offerDate.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_form1.offerDate }}<div class="form-error">{{ analogues_form1.offerDate.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form2.offerDate }}<div class="form-error">{{ analogues_form2.offerDate.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_form3.offerDate }}<div class="form-error">{{ analogues_form3.offerDate.errors }}</div></div>
+
+                        <div class="col-3 py-3 border"> <label class="form-label" for="{{ analogues_form1.analogueImage1.id_for_label }}">{{ analogues_form1.analogueImage1.label }}</label></div>
+                        <div class="col-3 py-3 border">{{ analogues_image11_form.imageFile }}<div class="form-error">{{ analogues_image11_form.imageFile.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_image21_form.imageFile }}<div class="form-error">{{ analogues_image21_form.imageFile.errors }}</div></div>
+                        <div class="col-3 py-3 border">{{ analogues_image31_form.imageFile }}<div class="form-error">{{ analogues_image31_form.imageFile.errors }}</div></div>
+
+
+                    </div>
+
+
+
             </div>
-
-
-      </div>
-</div>
 
 
 

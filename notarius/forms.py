@@ -2,7 +2,7 @@ from django import forms
 from django.db import models
 from django.forms import SelectDateWidget
 
-from .models import Report, PurposeOfAssessment, ClientPersonData, ObjectOfAssessment, Analogues
+from .models import Report, PurposeOfAssessment, ClientPersonData, ObjectOfAssessment, Analogues, Images
 
 
 # class AddReport(forms.ModelForm):
@@ -67,6 +67,16 @@ class AnaloguesForm(forms.ModelForm):
 
     class Meta:
         model = Analogues
+        fields = '__all__'
+
+        widgets = {
+            'offerDate': forms.TextInput(attrs={'type': 'date'}),
+            }
+
+class ImagesForm(forms.ModelForm):
+
+    class Meta:
+        model = Images
         fields = '__all__'
 
 # class UpdateClientData(forms.ModelForm):

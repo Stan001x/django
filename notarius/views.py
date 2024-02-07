@@ -14,8 +14,9 @@ import json
 from docx import Document
 from docx.shared import Pt
 from docxtpl import DocxTemplate
+from django.forms import formset_factory
 
-from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm, AnaloguesForm
+from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm, AnaloguesForm, ImagesForm
 from .models import Report, PurposeOfAssessment, Analogues, ObjectOfAssessment
 from django import forms
 
@@ -119,7 +120,12 @@ class AddItem(LoginRequiredMixin, CreateView):
         # context["purpose_of_assessment"] = CreatePurposeOfAssessment()
         context["client_person_data_form"] = CreatePersonDataForm()
         context["object_of_assessment_form"] = ObjectOfAssessmentForm()
-        context["analogues_form"] = AnaloguesForm()
+        context["analogues_form1"] = AnaloguesForm(prefix='analogue1')
+        context["analogues_form2"] = AnaloguesForm(prefix='analogue2')
+        context["analogues_form3"] = AnaloguesForm(prefix='analogue3')
+        context["analogues_image11_form"] = ImagesForm(prefix='analogues_image11')
+        context["analogues_image21_form"] = ImagesForm(prefix='analogues_image21')
+        context["analogues_image31_form"] = ImagesForm(prefix='analogues_image31')
         # if self.request.POST.get('clientType') == '2':
         #      print('лицо')
         #      context["client_person_data_form"] = None
@@ -136,24 +142,39 @@ class AddItem(LoginRequiredMixin, CreateView):
         form = self.form_class(request.POST, request.FILES)
         client_person_data_form = CreatePersonDataForm(request.POST)
         object_of_assessment_form = ObjectOfAssessmentForm(request.POST)
-        analogues_form = AnaloguesForm(request.POST, request.FILES)
+        analogues_form1 = AnaloguesForm(request.POST)
+        analogues_form2 = AnaloguesForm(request.POST)
+        analogues_form3 = AnaloguesForm(request.POST)
+        analogues_image11_form = ImagesForm(request.POST, request.FILES)
+        analogues_image21_form = ImagesForm(request.POST, request.FILES)
+        analogues_image31_form = ImagesForm(request.POST, request.FILES)
+        item_analogues_image11 = analogues_image11_form.save()
+        print('Сохранил11', item_analogues_image11.pk)
+        item_analogues_image21 = analogues_image21_form.save()
+        print('Сохранил21')
+        item_analogues_image31 = analogues_image31_form.save()
+        print('Сохранил31')
 
-        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form.is_valid()):
+        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form1.is_valid() and analogues_form2.is_valid() and analogues_form3.is_valid()):
     #         # <process form cleaned data>
             item_report = form.save()
             item_client = client_person_data_form.save()
             item_object = object_of_assessment_form.save()
-            item_analogues = analogues_form.save()
+            item_analogues1 = analogues_form1.save()
+            item_analogues2 = analogues_form2.save()
+            item_analogues3 = analogues_form3.save()
             report = Report.objects.get(id=item_report.pk)
             report.clientPersonData_id = item_client.pk
             report.objectOfAssessment_id = item_object.pk
-            report.analogue1_id = item_analogues.pk
-            report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', 'analogue1_id', ], force_update=True)
+            report.analogue1_id = item_analogues1.pk
+            report.analogue2_id = item_analogues2.pk
+            report.analogue3_id = item_analogues3.pk
+            report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', 'analogue1_id', 'analogue2_id', 'analogue3_id',], force_update=True)
             return redirect('notarius:update_item1', item_report.pk)
 
             #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
         return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form,
-                                                            "analogues_form": analogues_form,})
+                                                            "analogues_form1": analogues_form1, "analogues_form2": analogues_form2, "analogues_form3": analogues_form3,})
 
     # def post1(self, request, *args, **kwargs):
     #     print('1')
