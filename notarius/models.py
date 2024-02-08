@@ -155,3 +155,18 @@ class Images(models.Model):
 
     def __str__(self):
         return self.imageFile
+
+
+class Adjustments(models.Model):
+    analogueDiscount = models.IntegerField(validators=[MinValueValidator(-30), MaxValueValidator(0)], verbose_name="Скидка на торг", null=True)
+    analogueAdjustedDiscount = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100000000)], verbose_name="Скорректированная после торга цена", null=True)
+    analogueTechnicalConditionAdjustment = models.DecimalField(validators=[MinValueValidator(0), MaxValueValidator(1)], max_digits=5, decimal_places=4, verbose_name="Корректировка на физический износ",
+                                                null=True)
+    analogueAdjustedTechnicalCondition = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100000000)], verbose_name="Скорректированная после износа цена", null=True)
+    analogueAveragePrice = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100000000)],
+        verbose_name="Средневзвешенная цена", null=True)
+
+
+    def __str__(self):
+        return self.analogueDiscount

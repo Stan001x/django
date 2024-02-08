@@ -2,7 +2,7 @@ from django import forms
 from django.db import models
 from django.forms import SelectDateWidget
 
-from .models import Report, PurposeOfAssessment, ClientPersonData, ObjectOfAssessment, Analogues, Images
+from .models import Report, PurposeOfAssessment, ClientPersonData, ObjectOfAssessment, Analogues, Images, Adjustments
 
 
 # class AddReport(forms.ModelForm):
@@ -78,6 +78,17 @@ class ImagesForm(forms.ModelForm):
     class Meta:
         model = Images
         fields = '__all__'
+
+class AdjustmentsForm(forms.ModelForm):
+     class Meta:
+        model = Adjustments
+        fields = '__all__'
+#        'analogueTechnicalConditionAdjustment': forms.DecimalField(attrs={"disabled": "disabled"}),
+     def __init__(self, *args, **kwargs):
+         super().__init__(*args, **kwargs)
+         self.fields["analogueTechnicalConditionAdjustment"].widget.attrs["readonly"] = True
+         self.fields["analogueAdjustedDiscount"].widget.attrs["readonly"] = True
+
 
 # class UpdateClientData(forms.ModelForm):
 #     class Meta:

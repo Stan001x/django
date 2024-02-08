@@ -16,7 +16,7 @@ from docx.shared import Pt
 from docxtpl import DocxTemplate
 from django.forms import formset_factory
 
-from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm, AnaloguesForm, ImagesForm
+from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm, AnaloguesForm, ImagesForm, AdjustmentsForm
 from .models import Report, PurposeOfAssessment, Analogues, ObjectOfAssessment
 from django import forms
 
@@ -126,6 +126,9 @@ class AddItem(LoginRequiredMixin, CreateView):
         context["analogues_image11_form"] = ImagesForm(prefix='analogues_image11')
         context["analogues_image21_form"] = ImagesForm(prefix='analogues_image21')
         context["analogues_image31_form"] = ImagesForm(prefix='analogues_image31')
+        context["adjustment_form1"] = AdjustmentsForm(prefix='analogue1')
+        context["adjustment_form2"] = AdjustmentsForm(prefix='analogue2')
+        context["adjustment_form3"] = AdjustmentsForm(prefix='analogue3')
         # if self.request.POST.get('clientType') == '2':
         #      print('лицо')
         #      context["client_person_data_form"] = None
@@ -142,18 +145,21 @@ class AddItem(LoginRequiredMixin, CreateView):
         form = self.form_class(request.POST, request.FILES)
         client_person_data_form = CreatePersonDataForm(request.POST)
         object_of_assessment_form = ObjectOfAssessmentForm(request.POST)
-        analogues_form1 = AnaloguesForm(request.POST)
-        analogues_form2 = AnaloguesForm(request.POST)
-        analogues_form3 = AnaloguesForm(request.POST)
-        analogues_image11_form = ImagesForm(request.POST, request.FILES)
-        analogues_image21_form = ImagesForm(request.POST, request.FILES)
-        analogues_image31_form = ImagesForm(request.POST, request.FILES)
-        item_analogues_image11 = analogues_image11_form.save()
-        print('Сохранил11', item_analogues_image11.pk)
-        item_analogues_image21 = analogues_image21_form.save()
-        print('Сохранил21')
-        item_analogues_image31 = analogues_image31_form.save()
-        print('Сохранил31')
+        analogues_form1 = AnaloguesForm(request.POST, prefix='analogue1')
+        analogues_form2 = AnaloguesForm(request.POST, prefix='analogue2')
+        analogues_form3 = AnaloguesForm(request.POST, prefix='analogue3')
+        analogues_image11_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image11')
+        analogues_image21_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image21')
+        analogues_image31_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image31')
+        if analogues_image11_form.is_valid():
+            item_analogues_image11 = analogues_image11_form.save()
+            print('Сохранил11', item_analogues_image11.pk)
+            if analogues_image21_form.is_valid():
+                item_analogues_image21 = analogues_image21_form.save()
+                print('Сохранил21')
+                if analogues_image31_form.is_valid():
+                    item_analogues_image31 = analogues_image31_form.save()
+                    print('Сохранил31')
 
         if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form1.is_valid() and analogues_form2.is_valid() and analogues_form3.is_valid()):
     #         # <process form cleaned data>
@@ -174,7 +180,8 @@ class AddItem(LoginRequiredMixin, CreateView):
 
             #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
         return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form,
-                                                            "analogues_form1": analogues_form1, "analogues_form2": analogues_form2, "analogues_form3": analogues_form3,})
+                                                            "analogues_form1": analogues_form1, "analogues_form2": analogues_form2, "analogues_form3": analogues_form3,
+                                                            'analogues_image11_form': analogues_image11_form, 'analogues_image21_form': analogues_image21_form, 'analogues_image31_form': analogues_image31_form,})
 
     # def post1(self, request, *args, **kwargs):
     #     print('1')

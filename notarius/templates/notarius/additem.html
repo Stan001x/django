@@ -66,6 +66,11 @@
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="analogues-tab" data-bs-toggle="pill" data-bs-target="#analogues" type="button" role="tab" aria-controls="analogues" aria-selected="false">Аналоги</button>
   </li>
+
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="adjustments-tab" data-bs-toggle="pill" data-bs-target="#adjustments" type="button" role="tab" aria-controls="adjustments" aria-selected="false">Корректировки</button>
+  </li>
+
             <li class="my-auto ms-auto">
                 <button type="submit" name="Add Item" value="Add Item">Создать отчет</button>
             </li>
@@ -174,8 +179,63 @@
 
 
 
+
+</div>
+
+    <div class="tab-pane fade" id="adjustments" role="tabpanel" aria-labelledby="adjustments-tab">
+        <h3 class="py-3">Корректировки</h3>
+
+
+            <div class="row">
+
+                        <div class="col-3 py-3 border">Характеристика</div>
+                        <div class="col-3 py-3 border">Объект оценки</div>
+                        <div class="col-2 py-3 border">Аналог 1</div>
+                        <div class="col-2 py-3 border">Аналог 2</div>
+                        <div class="col-2 py-3 border">Аналог 3</div>
+
+                        <div class="col-3 py-3 border" >Корректировка на торг, %</div>
+                        <div class="col-3 py-3 border" ></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueDiscount }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueDiscount }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueDiscount }}</div>
+
+                        <div class="col-3 py-3 border" >Скорректированная цена, руб.</div>
+                        <div class="col-3 py-3 border" ></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAdjustedDiscount }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAdjustedDiscount }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAdjustedDiscount }}</div>
+
+                        <div class="col-3 py-3 border" >Корректировка на техническое состояние, коэф.</div>
+                        <div class="col-3 py-3 border" ></div>
+                        <div class="col-2 py-3 border" >{{ adjustment_form1.analogueTechnicalConditionAdjustment }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueTechnicalConditionAdjustment }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueTechnicalConditionAdjustment }}</div>
+
+                        <div class="col-3 py-3 border" >Скорректированная цена, руб.</div>
+                        <div class="col-3 py-3 border" ></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAdjustedTechnicalCondition }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAdjustedTechnicalCondition }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAdjustedTechnicalCondition }}</div>
+
+                        <div class="col-3 py-3 border" >Средневзвешенная стоимость, руб.</div>
+                        <div class="col-3 py-3 border" ></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAveragePrice }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAveragePrice }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAveragePrice }}</div>
+
+                        <div class="col-3 py-3 border" >Итоговая стоимость стоимость, руб.</div>
+                        <div class="col-3 py-3 border" >00000</div>
+                        <div class="col-2 py-3 border"></div>
+                        <div class="col-2 py-3 border"></div>
+                        <div class="col-2 py-3 border"></div>
+
+
+
             </div>
 
+
+    </div>
 
 
 
