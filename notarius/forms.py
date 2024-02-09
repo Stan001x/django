@@ -26,7 +26,7 @@ class CreateReport(forms.ModelForm):
 
     class Meta:
         model = Report
-        fields = ['contractNumber', 'conrtractDate', 'reportNumber', 'dateOfAssessment', 'dateOfReport', 'documentsOfReport', 'purposeOfAssessment', 'clientName']
+        fields = ['contractNumber', 'conrtractDate', 'reportNumber', 'dateOfAssessment', 'dateOfReport', 'documentsOfReport', 'purposeOfAssessment', 'clientName', 'objectTotalCost']
         required = (
             'contractNumber',
         )
@@ -36,6 +36,10 @@ class CreateReport(forms.ModelForm):
             'dateOfAssessment': forms.TextInput(attrs={'type': 'date'}),
             'dateOfReport': forms.TextInput(attrs={'type': 'date'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["objectTotalCost"].widget.attrs["readonly"] = True
 
 
 class CreatePurposeOfAssessment(forms.ModelForm):
@@ -67,7 +71,8 @@ class AnaloguesForm(forms.ModelForm):
 
     class Meta:
         model = Analogues
-        fields = '__all__'
+        fields = ['analogueModel', 'analogueYear', 'analogueLocation', 'analogueTechnicalCondition', 'analogueDeterioration', 'analogueCost', 'analogueSourceOfInformation',
+                  'offerDate']
 
         widgets = {
             'offerDate': forms.TextInput(attrs={'type': 'date'}),
@@ -88,6 +93,8 @@ class AdjustmentsForm(forms.ModelForm):
          super().__init__(*args, **kwargs)
          self.fields["analogueTechnicalConditionAdjustment"].widget.attrs["readonly"] = True
          self.fields["analogueAdjustedDiscount"].widget.attrs["readonly"] = True
+         self.fields["analogueAdjustedTechnicalCondition"].widget.attrs["readonly"] = True
+         self.fields["analogueAveragePrice"].widget.attrs["readonly"] = True
 
 
 # class UpdateClientData(forms.ModelForm):

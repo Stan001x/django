@@ -25,6 +25,8 @@ class Report(models.Model):
     analogue1 = models.ForeignKey('Analogues', on_delete=models.CASCADE, default='', verbose_name="Объект аналог1", related_name='analogue1', null=True)
     analogue2 = models.ForeignKey('Analogues', on_delete=models.CASCADE, default='', verbose_name="Объект аналог2", related_name='analogue2', null=True)
     analogue3 = models.ForeignKey('Analogues', on_delete=models.CASCADE, default='', verbose_name="Объект аналог3", related_name='analogue3', null=True)
+    objectTotalCost = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100000000)],
+                                                   verbose_name="Итоговая стоимость", null=True)
 
     image = models.ImageField(null=True, upload_to='images')
 
@@ -118,32 +120,35 @@ class Analogues(models.Model):
                                   related_name='analogueimage1', null=True)
     analogueImage2 = models.ForeignKey('Images', on_delete=models.CASCADE, default='', verbose_name="Скриншот 2 аналога",
                                   related_name='analogueimage2', null=True)
+    analogueAdjustments = models.ForeignKey('Adjustments', on_delete=models.CASCADE, default='',
+                                       verbose_name="Корректировки аналога",
+                                       related_name='analogueadjustments', null=True)
 
-    def save(self, *args, **kwargs):
-        # Сначала - обычное сохранение
-        super(Analogues, self).save(*args, **kwargs)
-
-        # Проверяем, указан ли логотип
-        if self.image:
-            filename = f'media/{self.image.name}'
-            filepath = self.image.path
-            width = self.image.width
-            height = self.image.height
-
-            max_size = max(width, height)
-
-            # Может, и не надо ничего менять?
-            if max_size > _MAX_SIZE:
-                # Надо, Федя, надо
-                image = Image.open(filename)
-                # resize - безопасная функция, она создаёт новый объект, а не
-                # вносит изменения в исходный, поэтому так
-                image = image.resize(
-                    (round(width / max_size * _MAX_SIZE),  # Сохраняем пропорции
-                    round(height / max_size * _MAX_SIZE)),
-                    )
-                # И не забыть сохраниться
-                image.save(filename)
+    # def save(self, *args, **kwargs):
+    #     # Сначала - обычное сохранение
+    #     super(Analogues, self).save(*args, **kwargs)
+    #
+    #     # Проверяем, указан ли логотип
+    #     if self.image:
+    #         filename = f'media/{self.image.name}'
+    #         filepath = self.image.path
+    #         width = self.image.width
+    #         height = self.image.height
+    #
+    #         max_size = max(width, height)
+    #
+    #         # Может, и не надо ничего менять?
+    #         if max_size > _MAX_SIZE:
+    #             # Надо, Федя, надо
+    #             image = Image.open(filename)
+    #             # resize - безопасная функция, она создаёт новый объект, а не
+    #             # вносит изменения в исходный, поэтому так
+    #             image = image.resize(
+    #                 (round(width / max_size * _MAX_SIZE),  # Сохраняем пропорции
+    #                 round(height / max_size * _MAX_SIZE)),
+    #                 )
+    #             # И не забыть сохраниться
+    #             image.save(filename)
 
 
     def __str__(self):
@@ -159,13 +164,13 @@ class Images(models.Model):
 
 class Adjustments(models.Model):
     analogueDiscount = models.IntegerField(validators=[MinValueValidator(-30), MaxValueValidator(0)], verbose_name="Скидка на торг", null=True)
-    analogueAdjustedDiscount = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100000000)], verbose_name="Скорректированная после торга цена", null=True)
+    analogueAdjustedDiscount = models.DecimalField(validators=[MinValueValidator(0), MaxValueValidator(100000000)], verbose_name="Скорректированная после торга цена", null=True, max_digits=11, decimal_places=2)
     analogueTechnicalConditionAdjustment = models.DecimalField(validators=[MinValueValidator(0), MaxValueValidator(1)], max_digits=5, decimal_places=4, verbose_name="Корректировка на физический износ",
                                                 null=True)
-    analogueAdjustedTechnicalCondition = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100000000)], verbose_name="Скорректированная после износа цена", null=True)
-    analogueAveragePrice = models.IntegerField(
+    analogueAdjustedTechnicalCondition = models.DecimalField(validators=[MinValueValidator(0), MaxValueValidator(100000000)], verbose_name="Скорректированная после износа цена", null=True, max_digits=11, decimal_places=2)
+    analogueAveragePrice = models.DecimalField(
         validators=[MinValueValidator(0), MaxValueValidator(100000000)],
-        verbose_name="Средневзвешенная цена", null=True)
+        verbose_name="Средневзвешенная цена", null=True, max_digits=11, decimal_places=2)
 
 
     def __str__(self):

@@ -17,7 +17,7 @@ from docxtpl import DocxTemplate
 from django.forms import formset_factory
 
 from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm, AnaloguesForm, ImagesForm, AdjustmentsForm
-from .models import Report, PurposeOfAssessment, Analogues, ObjectOfAssessment
+from .models import Report, PurposeOfAssessment, Analogues, ObjectOfAssessment, ClientPersonData, Adjustments
 from django import forms
 
 
@@ -123,9 +123,9 @@ class AddItem(LoginRequiredMixin, CreateView):
         context["analogues_form1"] = AnaloguesForm(prefix='analogue1')
         context["analogues_form2"] = AnaloguesForm(prefix='analogue2')
         context["analogues_form3"] = AnaloguesForm(prefix='analogue3')
-        context["analogues_image11_form"] = ImagesForm(prefix='analogues_image11')
-        context["analogues_image21_form"] = ImagesForm(prefix='analogues_image21')
-        context["analogues_image31_form"] = ImagesForm(prefix='analogues_image31')
+        # context["analogues_image11_form"] = ImagesForm(prefix='analogues_image11')
+        # context["analogues_image21_form"] = ImagesForm(prefix='analogues_image21')
+        # context["analogues_image31_form"] = ImagesForm(prefix='analogues_image31')
         context["adjustment_form1"] = AdjustmentsForm(prefix='analogue1')
         context["adjustment_form2"] = AdjustmentsForm(prefix='analogue2')
         context["adjustment_form3"] = AdjustmentsForm(prefix='analogue3')
@@ -148,20 +148,24 @@ class AddItem(LoginRequiredMixin, CreateView):
         analogues_form1 = AnaloguesForm(request.POST, prefix='analogue1')
         analogues_form2 = AnaloguesForm(request.POST, prefix='analogue2')
         analogues_form3 = AnaloguesForm(request.POST, prefix='analogue3')
-        analogues_image11_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image11')
-        analogues_image21_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image21')
-        analogues_image31_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image31')
-        if analogues_image11_form.is_valid():
-            item_analogues_image11 = analogues_image11_form.save()
-            print('Сохранил11', item_analogues_image11.pk)
-            if analogues_image21_form.is_valid():
-                item_analogues_image21 = analogues_image21_form.save()
-                print('Сохранил21')
-                if analogues_image31_form.is_valid():
-                    item_analogues_image31 = analogues_image31_form.save()
-                    print('Сохранил31')
+        adjustment_form1 = AdjustmentsForm(request.POST, prefix='analogue1')
+        adjustment_form2 = AdjustmentsForm(request.POST, prefix='analogue2')
+        adjustment_form3 = AdjustmentsForm(request.POST, prefix='analogue3')
+        # analogues_image11_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image11')
+        # analogues_image21_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image21')
+        # analogues_image31_form = ImagesForm(request.POST, request.FILES, prefix='analogues_image31')
+        # if analogues_image11_form.is_valid():
+        #     item_analogues_image11 = analogues_image11_form.save()
+        #     print('Сохранил11', item_analogues_image11.pk)
+        #     if analogues_image21_form.is_valid():
+        #         item_analogues_image21 = analogues_image21_form.save()
+        #         print('Сохранил21')
+        #         if analogues_image31_form.is_valid():
+        #             item_analogues_image31 = analogues_image31_form.save()
+        #             print('Сохранил31')
 
-        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form1.is_valid() and analogues_form2.is_valid() and analogues_form3.is_valid()):
+        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form1.is_valid() and analogues_form2.is_valid() and analogues_form3.is_valid()
+        and adjustment_form1.is_valid() and adjustment_form2.is_valid() and adjustment_form3.is_valid()):
     #         # <process form cleaned data>
             item_report = form.save()
             item_client = client_person_data_form.save()
@@ -169,19 +173,32 @@ class AddItem(LoginRequiredMixin, CreateView):
             item_analogues1 = analogues_form1.save()
             item_analogues2 = analogues_form2.save()
             item_analogues3 = analogues_form3.save()
+            item_adjustment1 = adjustment_form1.save()
+            item_adjustment2 = adjustment_form2.save()
+            item_adjustment3 = adjustment_form3.save()
             report = Report.objects.get(id=item_report.pk)
+            analogue1 = Analogues.objects.get(id=item_analogues1.pk)
+            analogue2 = Analogues.objects.get(id=item_analogues2.pk)
+            analogue3 = Analogues.objects.get(id=item_analogues3.pk)
             report.clientPersonData_id = item_client.pk
             report.objectOfAssessment_id = item_object.pk
             report.analogue1_id = item_analogues1.pk
             report.analogue2_id = item_analogues2.pk
             report.analogue3_id = item_analogues3.pk
             report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', 'analogue1_id', 'analogue2_id', 'analogue3_id',], force_update=True)
+            analogue1.analogueAdjustments_id = item_adjustment1
+            analogue1.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            analogue2.analogueAdjustments_id = item_adjustment2
+            analogue2.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            analogue3.analogueAdjustments_id = item_adjustment3
+            analogue3.save(update_fields=['analogueAdjustments_id', ], force_update=True)
             return redirect('notarius:update_item1', item_report.pk)
 
             #print("This is my newly created instance", Report.objects.get(contractNumber=self.request.POST.get('contractNumber')))
         return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form,
                                                             "analogues_form1": analogues_form1, "analogues_form2": analogues_form2, "analogues_form3": analogues_form3,
-                                                            'analogues_image11_form': analogues_image11_form, 'analogues_image21_form': analogues_image21_form, 'analogues_image31_form': analogues_image31_form,})
+                                                            'adjustment_form1': adjustment_form1, 'adjustment_form2': adjustment_form2, 'adjustment_form3': adjustment_form3,
+                                                            })
 
     # def post1(self, request, *args, **kwargs):
     #     print('1')
@@ -286,9 +303,75 @@ def update_item(request, my_id):
 
 class UpdateReport(LoginRequiredMixin, UpdateView):
     model = Report
-    fields = '__all__'
+    fields = ['contractNumber', 'conrtractDate', 'reportNumber', 'dateOfAssessment', 'dateOfReport', 'documentsOfReport', 'purposeOfAssessment', 'clientName', 'objectTotalCost']
     context_object_name = 'item'
-    template_name = 'notarius/updateitem1.html'
+    template_name = 'notarius/additem.html'
+    # client = ClientPersonData.objects.get(pk=object.clientPersonData_id)
+    # client_person_data_form = CreatePersonDataForm(instance=client)
+    # extra_context = {
+    #     'client_person_data_form': client_person_data_form,
+    # }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["client_person_data_form"] = CreatePersonDataForm(instance=ClientPersonData.objects.get(pk=self.object.clientPersonData_id))
+        context["object_of_assessment_form"] = ObjectOfAssessmentForm(instance=ObjectOfAssessment.objects.get(pk=self.object.objectOfAssessment_id))
+        context["analogues_form1"] = AnaloguesForm(instance=Analogues.objects.get(pk=self.object.analogue1_id), prefix='analogue1')
+        context["analogues_form2"] = AnaloguesForm(instance=Analogues.objects.get(pk=self.object.analogue2_id), prefix='analogue2')
+        context["analogues_form3"] = AnaloguesForm(instance=Analogues.objects.get(pk=self.object.analogue3_id), prefix='analogue3')
+        a = Analogues.objects.get(pk=self.object.analogue1_id).pk
+        print(a)
+#        context["adjustment_form1"] = AdjustmentsForm(instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=self.object.analogue1_id).pk), prefix='analogue1')
+        context["adjustment_form2"] = AdjustmentsForm(prefix='analogue2')
+        context["adjustment_form3"] = AdjustmentsForm(prefix='analogue3')
+        return context
+
+    def update(self, request, pk, *args, **kwargs):
+        form = self.object()
+        client = ClientPersonData.objects.get(pk=self.object.clientPersonData_id)
+        client_person_data_form = CreatePersonDataForm(instance=client)
+        object_of_assessment_form = ObjectOfAssessmentForm(request.POST)
+        analogues_form1 = AnaloguesForm(request.POST, prefix='analogue1')
+        analogues_form2 = AnaloguesForm(request.POST, prefix='analogue2')
+        analogues_form3 = AnaloguesForm(request.POST, prefix='analogue3')
+        adjustment_form1 = AdjustmentsForm(request.POST, prefix='analogue1')
+        adjustment_form2 = AdjustmentsForm(request.POST, prefix='analogue2')
+        adjustment_form3 = AdjustmentsForm(request.POST, prefix='analogue3')
+
+        if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form1.is_valid() and analogues_form2.is_valid() and analogues_form3.is_valid()
+        and adjustment_form1.is_valid() and adjustment_form2.is_valid() and adjustment_form3.is_valid()):
+    #         # <process form cleaned data>
+            item_report = form.save()
+            item_client = client_person_data_form.save()
+            item_object = object_of_assessment_form.save()
+            item_analogues1 = analogues_form1.save()
+            item_analogues2 = analogues_form2.save()
+            item_analogues3 = analogues_form3.save()
+            item_adjustment1 = adjustment_form1.save()
+            item_adjustment2 = adjustment_form2.save()
+            item_adjustment3 = adjustment_form3.save()
+            report = Report.objects.get(id=item_report.pk)
+            analogue1 = Analogues.objects.get(id=item_analogues1.pk)
+            analogue2 = Analogues.objects.get(id=item_analogues2.pk)
+            analogue3 = Analogues.objects.get(id=item_analogues3.pk)
+            report.clientPersonData_id = item_client.pk
+            report.objectOfAssessment_id = item_object.pk
+            report.analogue1_id = item_analogues1.pk
+            report.analogue2_id = item_analogues2.pk
+            report.analogue3_id = item_analogues3.pk
+            report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', 'analogue1_id', 'analogue2_id', 'analogue3_id',], force_update=True)
+            analogue1.analogueAdjustments_id = item_adjustment1
+            analogue1.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            analogue2.analogueAdjustments_id = item_adjustment2
+            analogue2.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            analogue3.analogueAdjustments_id = item_adjustment3
+            analogue3.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            return redirect('notarius:update_item1', item_report.pk)
+
+        return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form,
+                                                            "analogues_form1": analogues_form1, "analogues_form2": analogues_form2, "analogues_form3": analogues_form3,
+                                                            'adjustment_form1': adjustment_form1, 'adjustment_form2': adjustment_form2, 'adjustment_form3': adjustment_form3,
+                                                            })
 
 
     def get_success_url(self, *args, **kwargs):

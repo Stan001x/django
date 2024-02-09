@@ -196,36 +196,36 @@
 
                         <div class="col-3 py-3 border" >Корректировка на торг, %</div>
                         <div class="col-3 py-3 border" ></div>
-                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueDiscount }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueDiscount }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueDiscount }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueDiscount }}<div class="form-error">{{ adjustment_form1.analogueDiscount.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueDiscount }}<div class="form-error">{{ adjustment_form2.analogueDiscount.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueDiscount }}<div class="form-error">{{ adjustment_form3.analogueDiscount.errors }}</div></div>
 
                         <div class="col-3 py-3 border" >Скорректированная цена, руб.</div>
                         <div class="col-3 py-3 border" ></div>
-                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAdjustedDiscount }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAdjustedDiscount }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAdjustedDiscount }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAdjustedDiscount }}<div class="form-error">{{ adjustment_form1.analogueAdjustedDiscount.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAdjustedDiscount }}<div class="form-error">{{ adjustment_form2.analogueAdjustedDiscount.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAdjustedDiscount }}<div class="form-error">{{ adjustment_form3.analogueAdjustedDiscount.errors }}</div></div>
 
                         <div class="col-3 py-3 border" >Корректировка на техническое состояние, коэф.</div>
                         <div class="col-3 py-3 border" ></div>
-                        <div class="col-2 py-3 border" >{{ adjustment_form1.analogueTechnicalConditionAdjustment }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueTechnicalConditionAdjustment }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueTechnicalConditionAdjustment }}</div>
+                        <div class="col-2 py-3 border" >{{ adjustment_form1.analogueTechnicalConditionAdjustment }}<div class="form-error">{{ adjustment_form1.analogueTechnicalConditionAdjustment.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueTechnicalConditionAdjustment }}<div class="form-error">{{ adjustment_form2.analogueTechnicalConditionAdjustment.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueTechnicalConditionAdjustment }} <div class="form-error">{{ adjustment_form3.analogueTechnicalConditionAdjustment.errors }}</div></div>
 
                         <div class="col-3 py-3 border" >Скорректированная цена, руб.</div>
                         <div class="col-3 py-3 border" ></div>
-                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAdjustedTechnicalCondition }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAdjustedTechnicalCondition }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAdjustedTechnicalCondition }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAdjustedTechnicalCondition }}<div class="form-error">{{ adjustment_form1.analogueAdjustedTechnicalCondition.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAdjustedTechnicalCondition }}<div class="form-error">{{ adjustment_form2.analogueAdjustedTechnicalCondition.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAdjustedTechnicalCondition }}<div class="form-error">{{ adjustment_form3.analogueAdjustedTechnicalCondition.errors }}</div></div>
 
                         <div class="col-3 py-3 border" >Средневзвешенная стоимость, руб.</div>
                         <div class="col-3 py-3 border" ></div>
-                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAveragePrice }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAveragePrice }}</div>
-                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAveragePrice }}</div>
+                        <div class="col-2 py-3 border">{{ adjustment_form1.analogueAveragePrice }}<div class="form-error">{{ adjustment_form1.analogueAveragePrice.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form2.analogueAveragePrice }}<div class="form-error">{{ adjustment_form2.analogueAveragePrice.errors }}</div></div>
+                        <div class="col-2 py-3 border">{{ adjustment_form3.analogueAveragePrice }}<div class="form-error">{{ adjustment_form3.analogueAveragePrice.errors }}</div></div>
 
                         <div class="col-3 py-3 border" >Итоговая стоимость стоимость, руб.</div>
-                        <div class="col-3 py-3 border" >00000</div>
+                        <div class="col-3 py-3 border" >{{ form.objectTotalCost }}<div class="form-error">{{ form.objectTotalCost.errors }}</div></div>
                         <div class="col-2 py-3 border"></div>
                         <div class="col-2 py-3 border"></div>
                         <div class="col-2 py-3 border"></div>
