@@ -44,7 +44,8 @@ def MakeReport(report):
     doc = DocxTemplate('notarius/documents/notar.docx')
     context = {'report': report}
     doc.render(context)
-    doc.save(f'notarius/documents/{report.contractNumber}.docx')
+    print(report.analogue1_id)
+    doc.save(f'media/documents/notarius/{report.contractNumber}.docx')
 
 # def MakeReport(item):
 #     document = Document('notarius/documents/notar.docx')
@@ -91,6 +92,7 @@ class ReportListView(ListView):
 #    item = Report.objects.get(id=my_id)
 #    context = {
 #        'item':item
+
 #    }
 #    return render(request, "notarius/report.html", context=context)
 
@@ -306,11 +308,7 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
     fields = ['contractNumber', 'conrtractDate', 'reportNumber', 'dateOfAssessment', 'dateOfReport', 'documentsOfReport', 'purposeOfAssessment', 'clientName', 'objectTotalCost']
     context_object_name = 'item'
     template_name = 'notarius/additem.html'
-    # client = ClientPersonData.objects.get(pk=object.clientPersonData_id)
-    # client_person_data_form = CreatePersonDataForm(instance=client)
-    # extra_context = {
-    #     'client_person_data_form': client_person_data_form,
-    # }
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -319,17 +317,14 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
         context["analogues_form1"] = AnaloguesForm(instance=Analogues.objects.get(pk=self.object.analogue1_id), prefix='analogue1')
         context["analogues_form2"] = AnaloguesForm(instance=Analogues.objects.get(pk=self.object.analogue2_id), prefix='analogue2')
         context["analogues_form3"] = AnaloguesForm(instance=Analogues.objects.get(pk=self.object.analogue3_id), prefix='analogue3')
-        a = Analogues.objects.get(pk=self.object.analogue1_id).pk
-        print(a)
-#        context["adjustment_form1"] = AdjustmentsForm(instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=self.object.analogue1_id).pk), prefix='analogue1')
-        context["adjustment_form2"] = AdjustmentsForm(prefix='analogue2')
-        context["adjustment_form3"] = AdjustmentsForm(prefix='analogue3')
+        context["adjustment_form1"] = AdjustmentsForm(instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=self.object.analogue1_id).analogueAdjustments_id), prefix='analogue1')
+        context["adjustment_form2"] = AdjustmentsForm(instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=self.object.analogue2_id).analogueAdjustments_id), prefix='analogue2')
+        context["adjustment_form3"] = AdjustmentsForm(instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=self.object.analogue3_id).analogueAdjustments_id), prefix='analogue3')
         return context
 
     def update(self, request, pk, *args, **kwargs):
-        form = self.object()
-        client = ClientPersonData.objects.get(pk=self.object.clientPersonData_id)
-        client_person_data_form = CreatePersonDataForm(instance=client)
+        form = self.object(request.POST)
+        client_person_data_form = CreatePersonDataForm(request.POST)
         object_of_assessment_form = ObjectOfAssessmentForm(request.POST)
         analogues_form1 = AnaloguesForm(request.POST, prefix='analogue1')
         analogues_form2 = AnaloguesForm(request.POST, prefix='analogue2')
@@ -340,33 +335,16 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
 
         if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form1.is_valid() and analogues_form2.is_valid() and analogues_form3.is_valid()
         and adjustment_form1.is_valid() and adjustment_form2.is_valid() and adjustment_form3.is_valid()):
-    #         # <process form cleaned data>
-            item_report = form.save()
-            item_client = client_person_data_form.save()
-            item_object = object_of_assessment_form.save()
-            item_analogues1 = analogues_form1.save()
-            item_analogues2 = analogues_form2.save()
-            item_analogues3 = analogues_form3.save()
-            item_adjustment1 = adjustment_form1.save()
-            item_adjustment2 = adjustment_form2.save()
-            item_adjustment3 = adjustment_form3.save()
-            report = Report.objects.get(id=item_report.pk)
-            analogue1 = Analogues.objects.get(id=item_analogues1.pk)
-            analogue2 = Analogues.objects.get(id=item_analogues2.pk)
-            analogue3 = Analogues.objects.get(id=item_analogues3.pk)
-            report.clientPersonData_id = item_client.pk
-            report.objectOfAssessment_id = item_object.pk
-            report.analogue1_id = item_analogues1.pk
-            report.analogue2_id = item_analogues2.pk
-            report.analogue3_id = item_analogues3.pk
-            report.save(update_fields=['clientPersonData_id', 'objectOfAssessment_id', 'analogue1_id', 'analogue2_id', 'analogue3_id',], force_update=True)
-            analogue1.analogueAdjustments_id = item_adjustment1
-            analogue1.save(update_fields=['analogueAdjustments_id', ], force_update=True)
-            analogue2.analogueAdjustments_id = item_adjustment2
-            analogue2.save(update_fields=['analogueAdjustments_id', ], force_update=True)
-            analogue3.analogueAdjustments_id = item_adjustment3
-            analogue3.save(update_fields=['analogueAdjustments_id', ], force_update=True)
-            return redirect('notarius:update_item1', item_report.pk)
+  #         # <process form cleaned data>
+            form.save(update_fields=['contractNumber', 'conrtractDate', 'reportNumber', 'dateOfAssessment', 'dateOfReport', 'documentsOfReport',
+                                     'purposeOfAssessment', 'clientName', 'objectTotalCost' ], force_update=True)
+            # analogue1.analogueAdjustments_id = item_adjustment1
+            # analogue1.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            # analogue2.analogueAdjustments_id = item_adjustment2
+            # analogue2.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            # analogue3.analogueAdjustments_id = item_adjustment3
+            # analogue3.save(update_fields=['analogueAdjustments_id', ], force_update=True)
+            return redirect('notarius:update_item1', form.pk)
 
         return render(request, self.template_name, context={'form': form, "client_person_data_form": client_person_data_form, "object_of_assessment_form": object_of_assessment_form,
                                                             "analogues_form1": analogues_form1, "analogues_form2": analogues_form2, "analogues_form3": analogues_form3,
@@ -379,10 +357,10 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
         if 'make_report' in self.request.POST:
             report = self.object
             url = reverse_lazy('notarius:update_item1', kwargs={'pk': report.pk})
-            print(report.contractNumber)
+            print(report.analogue1.analogueCost)
             MakeReport(report)
         else:
-            url = reverse_lazy('notarius:add_item')
+            url = reverse_lazy('notarius:update_item1', kwargs={'pk': self.object.pk})
         return url
     # def get_report(self, request):
     #     print(self.request.POST)
