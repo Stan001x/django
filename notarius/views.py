@@ -1,7 +1,11 @@
+import mimetypes
+from os.path import getsize
+from wsgiref.util import FileWrapper
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
+from django.http import HttpResponseNotFound, JsonResponse, HttpResponse, StreamingHttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.views import View
@@ -23,6 +27,7 @@ from django import forms
 
 
 def MakeReport(report):
+    print('make report start')
     # document = Document('notarius/documents/notar.docx')
     # style = document.styles['Normal']
     # # название шрифта
@@ -45,7 +50,7 @@ def MakeReport(report):
     context = {'report': report}
     doc.render(context)
     print(report.analogue1_id)
-    doc.save(f'media/documents/notarius/{report.contractNumber}.docx')
+    doc.save(f'media/documents/notarius/{report.pk}.docx')
 
 # def MakeReport(item):
 #     document = Document('notarius/documents/notar.docx')
@@ -336,7 +341,7 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
         adjustment_form1 = AdjustmentsForm(self.request.POST, prefix='analogue1', instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=my_object.analogue1_id).analogueAdjustments_id))
         adjustment_form2 = AdjustmentsForm(self.request.POST, prefix='analogue2', instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=my_object.analogue2_id).analogueAdjustments_id))
         adjustment_form3 = AdjustmentsForm(self.request.POST, prefix='analogue3', instance=Adjustments.objects.get(pk=Analogues.objects.get(pk=my_object.analogue3_id).analogueAdjustments_id))
-
+        print('start validation')
         if (form.is_valid() and client_person_data_form.is_valid() and object_of_assessment_form.is_valid() and analogues_form1.is_valid() and analogues_form2.is_valid() and analogues_form3.is_valid()
         and adjustment_form1.is_valid() and adjustment_form2.is_valid() and adjustment_form3.is_valid()):
   #         # <process form cleaned data>
@@ -349,6 +354,16 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
             adjustment_form1.save()
             adjustment_form2.save()
             adjustment_form3.save()
+            if 'make_report' in self.request.POST:
+                report = my_object
+                MakeReport(report)
+                print(open(f'media/documents/notarius/{report.pk}.docx', 'rb'))
+                chunk_size = 8192
+                response = StreamingHttpResponse(FileWrapper(open(f'media/documents/notarius/{report.pk}.docx', 'rb'), chunk_size),
+                                                 content_type=mimetypes.guess_type(f'media/documents/notarius/{report.pk}.docx')[0])
+                response['Content-Length'] = getsize(f'media/documents/notarius/{report.pk}.docx')
+                response['Content-Disposition'] = "attachment; filename=%s" % f'{report.reportNumber}.docx'
+                return response
             return redirect('notarius:update_item1', my_id)
 
         else:
@@ -370,17 +385,20 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
                                                             'adjustment_form1': adjustment_form1, 'adjustment_form2': adjustment_form2, 'adjustment_form3': adjustment_form3,
                                                             })
 
-
-    def get_success_url(self, *args, **kwargs):
-        """Detect the submit button used and act accordingly"""
-        if 'make_report' in self.request.POST:
-            report = self.object
-            url = reverse_lazy('notarius:update_item1', kwargs={'pk': report.pk})
-            MakeReport(report)
-
-        else:
-            url = reverse_lazy('notarius:update_item1', kwargs={'pk': self.object.pk})
-        return url
+#     def get_success_url(self, *args, **kwargs):
+#         print('start get success url')
+#         """Detect the submit button used and act accordingly"""
+#         if 'make_report' in self.request.POST:
+#             report = self.object
+# #            url = reverse_lazy('notarius:update_item1', kwargs={'pk': report.pk})
+#             MakeReport(report)
+#             print('1')
+#             print(redirect('http://127.0.0.1:8000/media/documents/notarius/129.docx'))
+#
+#         else:
+#             print('no make report')
+#             url = reverse_lazy('notarius:update_item1', kwargs={'pk': self.object.pk})
+#             return url
 
 
 # def update_item1(request, my_id):
