@@ -27,6 +27,7 @@ class Report(models.Model):
     analogue3 = models.ForeignKey('Analogues', on_delete=models.CASCADE, default='', verbose_name="Объект аналог3", related_name='analogue3', null=True)
     objectTotalCost = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100000000)],
                                                    verbose_name="Итоговая стоимость", null=True)
+    objectTotalCostWord = models.CharField(max_length=555, verbose_name="Итоговая стоимость словами", null=True, blank=True)
 
     image = models.ImageField(null=True, upload_to='images')
 

@@ -1,6 +1,7 @@
 import mimetypes
 from os.path import getsize
 from wsgiref.util import FileWrapper
+import num2rus
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -356,6 +357,8 @@ class UpdateReport(LoginRequiredMixin, UpdateView):
         and adjustment_form1.is_valid() and adjustment_form2.is_valid() and adjustment_form3.is_valid()):
   #         # <process form cleaned data>
             my_object.save(update_fields=['contractNumber', 'conrtractDate', 'reportNumber', 'dateOfAssessment', 'dateOfReport', 'documentsOfReport', 'purposeOfAssessment', 'clientName', 'objectTotalCost' ], force_update=True)
+            my_object.objectTotalCostWord = num2rus.converter(my_object.objectTotalCost)
+            my_object.save(update_fields=['objectTotalCostWord', ], force_update=True)
             client_person_data_form.save()
             object_of_assessment_form.save()
             analogues_form1.save()
