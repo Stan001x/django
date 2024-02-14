@@ -34,6 +34,7 @@ class Report(models.Model):
     class Meta:
         verbose_name = "Список отчетов"
         verbose_name_plural = "Список отчетов"
+        ordering = ['-pk']
 
 
     def __str__(self):

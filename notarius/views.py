@@ -3,6 +3,8 @@ from os.path import getsize
 from wsgiref.util import FileWrapper
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponseNotFound, JsonResponse, HttpResponse, StreamingHttpResponse
@@ -16,8 +18,8 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import json
 from docx import Document
-from docx.shared import Pt
-from docxtpl import DocxTemplate
+from docx.shared import Pt, Mm
+from docxtpl import DocxTemplate, InlineImage
 from django.forms import formset_factory
 
 from .forms import UpdateReport, CreateReport, CreatePurposeOfAssessment, CreatePersonDataForm, ObjectOfAssessmentForm, AnaloguesForm, ImagesForm, AdjustmentsForm
@@ -47,9 +49,9 @@ def MakeReport(report):
     # document.add_paragraph(f'Текст документа\n1')
     # document.save(f'notarius/documents/{report.contractNumber}.docx')
     doc = DocxTemplate('notarius/documents/notar.docx')
-    context = {'report': report}
+    image = InlineImage(doc, image_descriptor=report.analogue1.analogueImage1.imageFile, width=Mm(90))
+    context = {'report': report, 'image': image}
     doc.render(context)
-    print(report.analogue1_id)
     doc.save(f'media/documents/notarius/{report.pk}.docx')
 
 # def MakeReport(item):
@@ -91,7 +93,15 @@ class ReportListView(ListView):
     model = Report
     template_name = "notarius/notarius-main.html"
     context_object_name = 'items'
-    paginate_by = 10
+    paginate_by = 20
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        if query:
+            object_list = self.model.objects.filter(Q(clientName__icontains=query) | Q(reportNumber__icontains=query))
+        else:
+            object_list = self.model.objects.all()
+        return object_list
 
 # def indexItem(request, my_id):
 #    item = Report.objects.get(id=my_id)
