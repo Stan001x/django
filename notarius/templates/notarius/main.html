@@ -2,10 +2,27 @@
 
 
 {% block content%}
+{% include "notarius/navbar.html" %}
 
 
-  {% include "notarius/navbar.html" %}
 
-  <h1 class="text-center">Главная страница</h1>
+<div class="container pt-5">
+  <div class="row">
+    <div class="col-4">
+      <a href="{% url 'notarius:index' %}"> <div class="card rounded-3">
+        <img class="rounded-3" src="media/images/notarius.jpg" class="card-img-top" alt="...">
+        <div class="card-body"><h5 class="card-title">Подготовка отчетов для нотариуса</h5></div>
+      </div></a>
+    </div>
+    <div class="col-4">
+      Column
+    </div>
+    <div class="col-4">
+      Column
+    </div>
+  </div>
+</div>
+
+{% endblock %}
 
 

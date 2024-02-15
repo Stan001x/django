@@ -1,12 +1,12 @@
 from django.urls import path
 from .views import update_item, delete_item, ReportListView, ReportDetailView, ReportDeleteView, main, \
-    AddItem, UpdateReport
+    AddItem, UpdateReport, main
 
 app_name = "notarius"
 
 urlpatterns = [
     #/notarius/
-    #path('', index, name="index"),
+    path('', main, name="main"),
     path('notarius/', ReportListView.as_view(), name="index"),
     path('notarius/<int:pk>/', ReportDetailView.as_view(), name="report"),
     path('notarius/additem/', AddItem.as_view(), name="add_item"),
