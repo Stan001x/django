@@ -50,8 +50,8 @@ def MakeReport(report):
     # document.add_paragraph(f'Текст документа\n1')
     # document.save(f'notarius/documents/{report.contractNumber}.docx')
     doc = DocxTemplate('notarius/documents/notar.docx')
-    image = InlineImage(doc, image_descriptor=report.analogue1.analogueImage1.imageFile, width=Mm(90))
-    context = {'report': report, 'image': image}
+#    image = InlineImage(doc, image_descriptor=report.analogue1.analogueImage1.imageFile, width=Mm(90))
+    context = {'report': report}
     doc.render(context)
     doc.save(f'media/documents/notarius/{report.pk}.docx')
 
